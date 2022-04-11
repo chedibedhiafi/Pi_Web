@@ -1,0 +1,66 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Liste des Produits</h6>
+        <table class="table" >
+            <thead>
+            <tr>
+                <th>Id</th>
+                <th>Categorie</th>
+                <th>Promotion</th>
+                <th>Nom</th>
+                <th>Prix</th>
+                <th>Profit</th>
+                <th>Image</th>
+                <th>DELETE</th>
+                <th>UPDATE</th>
+                <th>DETAILS</th>
+
+
+
+
+
+                <form action="{{ path('ajout') }}">
+                    <input type="submit" value="AjouterProduit" class="btn btn-primary rounded-pill m-2">
+                </form>
+
+                <form action="{{ path('Recherche') }}">
+                    <input type="text" placeholder="nom" name="nom" class="form-control">
+                    <input type="submit" value="Recherche" class="btn btn-primary rounded-pill m-2">
+                </form>
+
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for pp in p|reverse %}
+
+                <tr>
+                    <td>{{ pp.id }}</td>
+                    <td>{{ pp.idCategorie.nom }}</td>
+                    <td>{{ pp.idPromotion.percentage }}</td>
+                    <td>{{ pp.nom }}</td>
+                    <td>{{ pp.prix }}</td>
+                    <td>{{ pp.profit }}</td>
+                    <td> <img src="{{ asset('uploads/' ~ pp.getImage())  }}" height="200" width="200"></td>
+                    <td><a href="{{ path('DeleteProduit',{'id':pp.id}) }}"  class="btn btn-danger rounded-pill m-2" >DELETE</a> </td>
+                    <td><a href="{{ path('UU',{'id':pp.id}) }}" class="btn btn-success rounded-pill m-2">UPDATE</a> </td>
+                    <td><a href="{{ path('details', {'id': pp.id}) }}" class="btn btn-primary rounded-pill m-2">DETAILS</a></td>
+
+
+
+
+
+
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+
+{% endblock %}

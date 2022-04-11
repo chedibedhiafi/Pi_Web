@@ -1,0 +1,43 @@
+
+
+{% extends 'base.html.twig' %}
+{% block body %}
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ produit.id }}</td>
+        </tr>
+        <tr>
+            <th>nom</th>
+            <td>{{ produit.nom }}</td>
+        </tr>
+        <tr>
+            <th>prix</th>
+            <td>{{ produit.prix }}</td>
+        </tr>
+        <tr>
+            <th>description</th>
+            <td>{{ produit.description }}</td>
+        </tr>
+        <tr>
+            <th>profit</th>
+            <td>{{ produit.profit }}</td>
+        </tr>
+        <tr>
+            <th>categorie</th>
+            <td>{{ produit.idCategorie.nom }}</td>
+        </tr>
+        <tr>
+            <th>promotion</th>
+            <td>{{ produit.idPromotion.percentage }}</td>
+        </tr>
+        <tr>
+            <th>image</th>
+            <td> <img src="{{ asset('uploads/' ~ produit.getImage())  }}"</td>
+        </tr>
+        </tbody>
+    </table>
+
+
+{% endblock %}

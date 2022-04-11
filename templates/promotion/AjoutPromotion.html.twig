@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+{{ form_start(f,{'attr': {'novalidate': 'novalidate'}} ) }}
+    <div class="bg-light rounded h-100 p-1">
+    <div class="mb-3">
+    <label>Promotion</label>
+    {{ form_widget(f.percentage,{'attr':{'class':'form-control'}}) }}
+    {{ form_errors(f.percentage,{'attr':{'class':'text-danger'}}) }}
+
+
+    </div>{{ form_end(f) }}
+{% endblock %}

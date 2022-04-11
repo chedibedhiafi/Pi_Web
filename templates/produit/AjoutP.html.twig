@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+{% block body %}
+    {{ form_start(ff,{'attr': {'novalidate': 'novalidate'}} ) }}
+
+    <div class="bg-light rounded h-100 p-1">
+            <div class="mb-3">
+                <label>Nom</label>
+                {{ form_widget(ff.nom,{'attr':{'class':'form-control'}}) }}
+                {{ form_errors(ff.nom,{'attr':{'class':'text-danger'}}) }}
+
+            </div>
+        <div class="mb-3">
+            <label>Prix</label>
+            {{ form_widget(ff.prix,{'attr':{'class':'form-control'}}) }}
+            {{ form_errors(ff.prix,{'attr':{'class':'text-danger'}}) }}
+
+        </div>
+        <div class="mb-3">
+            <label>Description</label>
+            {{ form_widget(ff.description,{'attr':{'class':'form-control'}}) }}
+            {{ form_errors(ff.description,{'attr':{'class':'text-danger'}}) }}
+
+        </div>
+        <div class="mb-3">
+            <label>Profit</label>
+            {{ form_widget(ff.profit,{'attr':{'class':'form-control'}}) }}
+            {{ form_errors(ff.profit,{'attr':{'class':'text-danger'}}) }}
+
+        </div>
+        <div class="mb-3">
+            <label>Promotion</label>
+            {{ form_widget(ff.idPromotion,{'attr':{'class':'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            <label>Categorie</label>
+            {{ form_widget(ff.idCategorie,{'attr':{'class':'form-control'}}) }}
+        </div>
+        <div class="mb-3">
+            <label>Image</label>
+            {{ form_widget(ff.imageFile,{'attr':{'class':'form-control'}}) }}
+        </div>
+
+
+    </div>
+    {{ form_end(ff) }}
+
+{% endblock %}
