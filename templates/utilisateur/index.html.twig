@@ -1,0 +1,74 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block table %}
+    
+            <!-- Recent Sales Start -->
+            <div class="container-fluid pt-4 px-4">
+                <div class="bg-light text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0">Utilisateurs</h6>
+                         <a href="{{ path('app_utilisateur_new') }}"><i class="fa fa-plus"></i></a>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Login</th>
+                <th>Mdp</th>
+                <th>DateNaissance</th>
+                <th>Nom</th>
+                <th>Prenom</th>
+                <th>Email</th>
+                <th>Tentative</th>
+                <th>UnlockDate</th>
+                <th>Consulter</th>
+                <th>Modifier</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for utilisateur in utilisateurs %}
+            <tr>
+                <td>{{ utilisateur.id }}</td>
+                <td>{{ utilisateur.login }}</td>
+                <td>{{ utilisateur.mdp }}</td>
+                <td>{{ utilisateur.dateNaissance ? utilisateur.dateNaissance|date('Y-m-d') : '' }}</td>
+                <td>{{ utilisateur.nom }}</td>
+                <td>{{ utilisateur.prenom }}</td>
+                <td>{{ utilisateur.email }}</td>
+                <td>{{ utilisateur.tentative }}</td>
+                <td>{{ utilisateur.unlockDate ? utilisateur.unlockDate|date('Y-m-d') : '' }}</td>
+                <td>
+                    <a href="{{ path('app_utilisateur_show', {'id': utilisateur.id}) }}"><i class="fa fa-eye"></i></a>
+                </td>
+                <td>
+                    <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}"><i class="fa fa-book"></i></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="10">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </div>
+                        </table>
+
+   
+                </div>
+            </div>
+            <!-- Recent Sales End -->
+{% endblock %}
+
+{% block form %}
+{% endblock %}
+{% block salesRevenue %}
+{% endblock %}
+{% block salesChart %}
+{% endblock %}
+{% block messages %}
+{% endblock %}
+
+    

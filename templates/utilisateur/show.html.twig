@@ -1,0 +1,68 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Utilisateur{% endblock %}
+
+{% block table %}
+<div class="container-fluid pt-4 px-4" align="center">
+			<div class="bg-light rounded h-100 p-4" align="center">
+    <h1>Utilisateur</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ utilisateur.id }}</td>
+            </tr>
+            <tr>
+                <th>Login</th>
+                <td>{{ utilisateur.login }}</td>
+            </tr>
+            <tr>
+                <th>Mdp</th>
+                <td>{{ utilisateur.mdp }}</td>
+            </tr>
+            <tr>
+                <th>DateNaissance</th>
+                <td>{{ utilisateur.dateNaissance ? utilisateur.dateNaissance|date('Y-m-d') : '' }}</td>
+            </tr>
+            <tr>
+                <th>Nom</th>
+                <td>{{ utilisateur.nom }}</td>
+            </tr>
+            <tr>
+                <th>Prenom</th>
+                <td>{{ utilisateur.prenom }}</td>
+            </tr>
+            <tr>
+                <th>Email</th>
+                <td>{{ utilisateur.email }}</td>
+            </tr>
+            <tr>
+                <th>Tentative</th>
+                <td>{{ utilisateur.tentative }}</td>
+            </tr>
+            <tr>
+                <th>UnlockDate</th>
+                <td>{{ utilisateur.unlockDate ? utilisateur.unlockDate|date('Y-m-d') : '' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+
+    <a href="{{ path('app_utilisateur_edit', {'id': utilisateur.id}) }}">Modifier</a>
+    <br>
+    <a href="{{ path('app_utilisateur_index') }}">Retour</a>
+
+    {{ include('utilisateur/_delete_form.html.twig') }}
+    </div>
+    </div>
+{% endblock %}
+
+{% block form %}
+{% endblock %}
+{% block salesRevenue %}
+{% endblock %}
+{% block salesChart %}
+{% endblock %}
+{% block messages %}
+{% endblock %}

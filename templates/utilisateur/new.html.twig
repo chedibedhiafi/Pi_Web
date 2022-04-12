@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ajout Utilisateur{% endblock %}
+
+{% block form %}
+<div class="container-fluid pt-4 px-4" align="center">
+			<div class="bg-light rounded h-100 p-4" align="center">
+    <h1>Ajouter un utilisateur</h1>
+
+    {{ include('utilisateur/_form.html.twig') }}
+
+
+    <a href="{{ path('app_utilisateur_index') }}">Retour</a>
+    </div>
+    </div>
+{% endblock %}
+
+{% block table %}
+{% endblock %}
+{% block salesRevenue %}
+{% endblock %}
+{% block salesChart %}
+{% endblock %}
+{% block messages %}
+{% endblock %}
