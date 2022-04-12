@@ -1,0 +1,71 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}
+	New Point de vente
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}{% endblock %}
+
+{% block widgets %}{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}
+	<div class="container-fluid pt-4 px-4">
+
+		<div class="bg-light text-center rounded p-4">
+
+			<div class="bg-light rounded h-100 p-4">
+				<h6 class="mb-4">Create new Point de vente</h6>
+				<table class="table">
+					<tbody>
+						<tr>
+							<th>Reference</th>
+							<td>{{ pointdevente.reference }}</td>
+						</tr>
+						<tr>
+							<th>Name</th>
+							<td>{{ pointdevente.name }}</td>
+						</tr>
+						<tr>
+							<th>Proprietaire</th>
+							<td>{{ pointdevente.proprietaire }}</td>
+						</tr>
+						<tr>
+							<th>Adresse</th>
+							<td>{{ pointdevente.adresse }}</td>
+						</tr>
+						<tr>
+							<th>DateOuverture</th>
+							<td>{{ pointdevente.dateOuverture ? pointdevente.dateOuverture|date('Y-m-d') : '' }}</td>
+						</tr>
+						<tr>
+							<th>Longitude</th>
+							<td>{{ pointdevente.longitude }}</td>
+						</tr>
+						<tr>
+							<th>Latitude</th>
+							<td>{{ pointdevente.latitude }}</td>
+						</tr>
+					</tbody>
+				</table>
+
+				<a href="{{ path('app_pointdevente_index') }}"><i class="fas fa-arrow-alt-circle-left"></i></a>
+
+				<a href="{{ path('app_pointdevente_edit', {'reference': pointdevente.reference}) }}"><i class="fas fa-edit"></i></a>
+
+				{{ include('pointdevente/_delete_form.html.twig') }}
+
+			</div>
+		</div>
+	{% endblock %}

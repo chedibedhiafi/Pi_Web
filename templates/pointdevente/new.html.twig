@@ -1,0 +1,35 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}
+	New Point de vente
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}{% endblock %}
+
+{% block widgets %}{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}
+	<div class="container-fluid pt-4 px-4" align="center">
+		<div class="bg-light rounded h-100 p-4" align="center">
+			<h6 class="mb-4">Create new Point de vente</h6>
+
+
+			{{ include('pointdevente/_form.html.twig') }}
+
+			<a href="{{ path('app_pointdevente_index') }}"><i class="fas fa-arrow-alt-circle-left"></i></a>
+		</div>
+
+	</div>
+{% endblock %}

@@ -1,0 +1,88 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}
+	Points de ventes
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}
+	<div class="container-fluid pt-4 px-4">
+
+		<div class="bg-light text-center rounded p-4">
+
+			<div class="d-flex align-items-center justify-content-between mb-4">
+				<h6 class="mb-0">Points de ventes</h6>
+				<a href="{{ path('app_pointdevente_new') }}" class="nav-link ">
+					<i class="fa fa-plus"></i>
+				</a>
+			</div>
+			<div class="table-responsive">
+
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Reference</th>
+							<th>Name</th>
+							<th>Proprietaire</th>
+							<th>Adresse</th>
+							<th>DateOuverture</th>
+							<th>Longitude</th>
+							<th>Latitude</th>
+							<th>Show</th>
+                            <th>Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for pointdevente in pointdeventes %}
+							<tr>
+								<td>{{ pointdevente.reference }}</td>
+								<td>{{ pointdevente.name }}</td>
+								<td>{{ pointdevente.proprietaire }}</td>
+								<td>{{ pointdevente.adresse }}</td>
+								<td>{{ pointdevente.dateOuverture ? pointdevente.dateOuverture|date('Y-m-d') : '' }}</td>
+								<td>{{ pointdevente.longitude }}</td>
+								<td>{{ pointdevente.latitude }}</td>
+								<td>
+
+									<a href="{{ path('app_pointdevente_show', {'reference': pointdevente.reference}) }}">
+										<i class="fa fa-eye"></i>
+									</a>
+								</td>
+								<td>
+									<a href="{{ path('app_pointdevente_edit', {'reference': pointdevente.reference}) }}">
+										<i class="fa fa-book"></i>
+									</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="8">no records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+
+		</div>
+
+	</div>
+
+{% endblock %}
+
+{% block widgets %}{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}
+{% endblock %}
