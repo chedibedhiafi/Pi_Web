@@ -1,0 +1,48 @@
+
+
+
+{% block body %}
+    <h1>Liste Des produits</h1>
+
+        <table class="table" border="1">
+
+            <thead>
+            <tr>
+                <th>Nom</th>
+                <th>Categorie</th>
+                <th>Prix</th>
+                <th>Profit</th>
+                <th>Promotion</th>
+                <th>PrixFinale</th>
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for pp in p|reverse %}
+
+                <tr>
+                    <td>{{ pp.nom }}</td>
+                    <td>{{ pp.idCategorie.nom }}</td>
+                    <td>{{ pp.prix }}</td>
+                    <td>{{ pp.profit }}</td>
+                    <td>{{ pp.idPromotion.percentage }}%</td>
+                    <td>{{ pp.prixfinale }}</td>
+
+
+
+
+
+
+
+
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+
+
+
+{% endblock %}

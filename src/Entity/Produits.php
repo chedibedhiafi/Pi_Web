@@ -2,16 +2,17 @@
 
 namespace App\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+
 use Symfony\Component\Validator\Constraints as Assert;
-use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Produits
  *
- * @ORM\Table(name="produits", indexes={@ORM\Index(name="id_promotion", columns={"id_promotion"}), @ORM\Index(name="test", columns={"id_categorie"})})
- * @ORM\Entity(repositoryClass="App\Repository\ProduitsRepository")
+ * @ORM\Table(name="produits", indexes={@ORM\Index(name="test", columns={"id_categorie"}), @ORM\Index(name="id_promotion", columns={"id_promotion"})})
+ * @ORM\Entity
  * @Vich\Uploadable
  */
 class Produits
@@ -29,14 +30,13 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="nom", type="string", length=256, nullable=false)
-     * @Assert\NotBlank(message="nom est obligatoire")
      */
     private $nom;
 
     /**
      * @var int
+     *
      * @ORM\Column(name="prix", type="integer", nullable=false)
-     * @Assert\NotBlank(message="prix est obligatoire")
      */
     private $prix;
 
@@ -44,13 +44,11 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="image", type="string", length=256, nullable=false)
-     *
      */
     private $image;
 
     /**
      * @Vich\UploadableField(mapping="product_images", fileNameProperty="image")
-     *
      * @var File
      */
     private $imageFile;
@@ -59,14 +57,6 @@ class Produits
      * @var string
      *
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message="description est obligatoire")
-     * @Assert\Length(
-     *     min = 5,
-     *     max = 100,
-     *     minMessage = "doit etre >=5",
-     *     maxMessage ="doit etre <=300"
-     *
-     * )
      */
     private $description;
 
@@ -74,20 +64,15 @@ class Produits
      * @var int
      *
      * @ORM\Column(name="profit", type="integer", nullable=false)
-     * @Assert\NotBlank(message="profit est obligatoire")
      */
     private $profit;
 
     /**
-     * @var \Promotion
+     * @var int
      *
-     * @ORM\ManyToOne(targetEntity="Promotion")
-     * @ORM\JoinColumns({
-     *   @ORM\JoinColumn(name="id_promotion", referencedColumnName="id")
-     * })
-     * @Assert\NotBlank(message="promotion est obligatoire")
+     * @ORM\Column(name="prixfinale", type="integer", nullable=false)
      */
-    private $idPromotion;
+    private $prixfinale;
 
     /**
      * @var \Categorie
@@ -96,9 +81,18 @@ class Produits
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_categorie", referencedColumnName="id")
      * })
-     * @Assert\NotBlank(message="categorie est obligatoire")
      */
     private $idCategorie;
+
+    /**
+     * @var \Promotion
+     *
+     * @ORM\ManyToOne(targetEntity="Promotion")
+     * @ORM\JoinColumns({
+     *   @ORM\JoinColumn(name="id_promotion", referencedColumnName="id")
+     * })
+     */
+    private $idPromotion;
 
     public function getId(): ?int
     {
@@ -122,6 +116,24 @@ class Produits
         return $this->prix;
     }
 
+    public function setPrix(int $prix): self
+    {
+        $this->prix = $prix;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): self
+    {
+        $this->image = $image;
+
+        return $this;
+    }
     public function setImageFile($image = null)
     {
         $this->imageFile = $image;
@@ -140,27 +152,7 @@ class Produits
         return $this->imageFile;
     }
 
-
-    public function setPrix(int $prix): self
-    {
-        $this->prix = $prix;
-
-        return $this;
-    }
-
-    public function getImage()
-    {
-        return $this->image;
-    }
-
-    public function setImage($image)
-    {
-        $this->image = $image;
-
-        return $this;
-    }
-
-    public function getDescription(): ?string
+        public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -184,14 +176,14 @@ class Produits
         return $this;
     }
 
-    public function getIdPromotion(): ?Promotion
+    public function getPrixfinale(): ?int
     {
-        return $this->idPromotion;
+        return $this->prixfinale;
     }
 
-    public function setIdPromotion(?Promotion $idPromotion): self
+    public function setPrixfinale(int $prixfinale): self
     {
-        $this->idPromotion = $idPromotion;
+        $this->prixfinale = $prixfinale;
 
         return $this;
     }
@@ -204,6 +196,18 @@ class Produits
     public function setIdCategorie(?Categorie $idCategorie): self
     {
         $this->idCategorie = $idCategorie;
+
+        return $this;
+    }
+
+    public function getIdPromotion(): ?Promotion
+    {
+        return $this->idPromotion;
+    }
+
+    public function setIdPromotion(?Promotion $idPromotion): self
+    {
+        $this->idPromotion = $idPromotion;
 
         return $this;
     }

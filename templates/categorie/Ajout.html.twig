@@ -2,6 +2,12 @@
 {% block body %}
     {{ form_start(f,{'attr': {'novalidate': 'novalidate'}} ) }}
     <div class="bg-light rounded h-100 p-1">
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-warning">
+            {{ message }}
+        </div>
+
+    {% endfor %}
         <div class="mb-3">
         <label>Nom</label>
         {{ form_widget(f.nom,{'attr':{'class':'form-control'}}) }}
@@ -10,4 +16,9 @@
 
 
 {{ form_end(f) }}
+    <form action="{{ path('A') }}">
+        <input type="submit" value="Back" class="btn btn-primary m-2">
+    </form>
+
+
 {% endblock %}

@@ -3,14 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-
 
 /**
  * Promotion
  *
  * @ORM\Table(name="promotion")
- * @ORM\Entity(repositoryClass="App\Repository\PromotionRepository")
+ * @ORM\Entity
  */
 class Promotion
 {
@@ -27,7 +25,6 @@ class Promotion
      * @var int
      *
      * @ORM\Column(name="percentage", type="integer", nullable=false)
-     * @Assert\NotBlank(message="percentage est obligatoire")
      */
     private $percentage;
 

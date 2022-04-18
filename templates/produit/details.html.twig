@@ -9,35 +9,42 @@
             <td>{{ produit.id }}</td>
         </tr>
         <tr>
-            <th>nom</th>
+            <th>Nom</th>
             <td>{{ produit.nom }}</td>
         </tr>
         <tr>
-            <th>prix</th>
+            <th>Prix</th>
             <td>{{ produit.prix }}</td>
         </tr>
         <tr>
-            <th>description</th>
+            <th>PrixFinale</th>
+            <td>{{ produit.prixfinale }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
             <td>{{ produit.description }}</td>
         </tr>
         <tr>
-            <th>profit</th>
+            <th>Profit</th>
             <td>{{ produit.profit }}</td>
         </tr>
         <tr>
-            <th>categorie</th>
+            <th>Categorie</th>
             <td>{{ produit.idCategorie.nom }}</td>
         </tr>
         <tr>
-            <th>promotion</th>
+            <th>Promotion</th>
             <td>{{ produit.idPromotion.percentage }}</td>
         </tr>
         <tr>
-            <th>image</th>
-            <td> <img src="{{ asset('uploads/' ~ produit.getImage())  }}"</td>
+            <th>Image</th>
+            <td> <img src="{{ asset('uploads/' ~ produit.getImage())  }}"></td>
         </tr>
         </tbody>
     </table>
+    <form action="{{ path('AA') }}">
+        <input type="submit" value="Back" class="btn btn-primary rounded-pill m-2">
+    </form>
 
 
 {% endblock %}

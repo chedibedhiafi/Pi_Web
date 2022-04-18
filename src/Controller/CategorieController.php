@@ -14,6 +14,7 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Knp\Component\Pager\PaginatorInterface;
 
 class CategorieController extends AbstractController
 {
@@ -32,8 +33,13 @@ class CategorieController extends AbstractController
      * @return Response
      * @Route("Affiche",name="A")
      */
-    function Affiche(CategorieRepository $repo){
-        $categorie=$repo->findAll(); //select *
+    function Affiche(CategorieRepository $repo ,PaginatorInterface $paginator,Request $request){
+        $donnees=$repo->findAll(); //select *
+        $categorie= $paginator->paginate(
+            $donnees,
+            $request->query->getInt('page',1),3
+
+        );
         return $this->render('categorie/Affiche.html.twig',['cc'=>$categorie]);
 
 
@@ -68,6 +74,11 @@ class CategorieController extends AbstractController
             $em=$this->getDoctrine()->getManager();
             $em->persist($categorie);
             $em->flush();
+
+            $this->addFlash(
+                'info',
+                'Added Successfully!'
+            );
             return $this->redirectToRoute('A');
         }
         return $this->render('categorie/Ajout.html.twig',['f'=>$form->createView()]);
@@ -91,6 +102,10 @@ class CategorieController extends AbstractController
             $em=$this->getDoctrine()->getManager();
             //$em->persist($classroom);
             $em->flush();
+            $this->addFlash(
+                'info',
+                'updated Successfully!'
+            );
             return $this->redirectToRoute('A');
         }
         return $this->render('categorie/Ajout.html.twig',['f'=>$form->createView()]);
@@ -117,4 +132,5 @@ class CategorieController extends AbstractController
         $categorie=$repository->findBy(['nom'=>$nom]);
         return $this->render('categorie/Affiche.html.twig',['cc'=>$categorie]);
     }
+
 }
