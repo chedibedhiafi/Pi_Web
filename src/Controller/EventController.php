@@ -28,6 +28,19 @@ class EventController extends AbstractController
             'events' => $events,
         ]);
     }
+    /**
+     * @Route("/front", name="app_event_indexf", methods={"GET"})
+     */
+    public function indexf(EntityManagerInterface $entityManager): Response
+    {
+        $events = $entityManager
+            ->getRepository(Event::class)
+            ->findAll();
+
+        return $this->render('event/indexf.html.twig', [
+            'events' => $events,
+        ]);
+    }
 
     /**
      * @Route("/new", name="app_event_new", methods={"GET", "POST"})

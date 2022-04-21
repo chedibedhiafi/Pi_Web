@@ -1,0 +1,25 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Event index{% endblock %}
+
+{% block body %}
+    <h1>Event index</h1>
+
+    {% for event in events %}
+        <div class=container>
+            <div class=row>
+              titre :  <h2>{{ event.titre }}</h2>
+                <p>{{ event.prix }} DT</p>
+               description : <p>{{ event.description }} </p>
+
+               le : {{ event.dateEvent ? event.dateEvent|date('m-d') : '' }}
+
+
+                <a href="{{ path('app_reservation_new',{'prix': event.prix}) }}"> <i class="bi bi-cart-plus"> reserver</i></a>
+                <hr>
+
+                </a>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock %}
