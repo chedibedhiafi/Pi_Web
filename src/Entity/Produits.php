@@ -166,7 +166,7 @@ class Produits
         return $this;
     }
 
-    public function getIdCategorie(): ?Categorie
+    public function getIdCategorie()
     {
         return $this->idCategorie;
     }
@@ -178,7 +178,7 @@ class Produits
         return $this;
     }
 
-    public function getIdPromotion(): ?Promotion
+    public function getIdPromotion()
     {
         return $this->idPromotion;
     }

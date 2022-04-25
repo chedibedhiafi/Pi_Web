@@ -2,14 +2,11 @@
 
 {% block title %}Inscription{% endblock %}
 
-{% block aboutUs %}
-
-
-
-    <!--<a href="{{ path('app_utilisateur_signup') }}">back to list</a>-->
-{% endblock %}
 
 {% block home %}
+{% endblock %}
+
+{% block aboutUs %}
 {% endblock %}
 
 {% block services %}
@@ -35,15 +32,10 @@
         </div>
         <center>
         <div class="col-lg-5 col-md-12" data-aos="fade-up" data-aos-delay="300">
-            <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-              <div class="form-group">
-            
-    
 
-    {{ include('utilisateur/_form.html.twig') }}
-    </div>
-    </form>
-    </div>
+            {{ include('utilisateur/_form.html.twig') }}
+
+        </div>
     </center>
     </div>
     </section>

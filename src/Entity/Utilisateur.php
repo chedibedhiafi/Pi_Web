@@ -5,20 +5,21 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * Utilisateur
  *
  * @ORM\Table(name="utilisateur")
  * @ORM\Entity
- * @UniqueEntity(fields={"login"}, message="Cet intervenant existe  déjà  .")
+ * @UniqueEntity(fields={"username","email"}, message="Cet utilisateur est déjà existant")
  */
-class Utilisateur
+class Utilisateur implements UserInterface
 {
     /**
      * @var int
      *
-     * @ORM\Column(name="id", type="integer", nullable=false)
+     * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
@@ -27,91 +28,107 @@ class Utilisateur
     /**
      * @var string
      *
-     * @ORM\Column(name="login", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ du login doit etre non vide")
+     * @ORM\Column(name="login", type="string", length=255)
+     * @Assert\NotBlank(message="Le champ du login doit etre non vide")
      */
-    private $login;
+    private $username;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="mdp", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ du mdp doit etre non vide")
+     * @ORM\Column(name="mdp", type="string", length=255)
+     * @Assert\NotBlank(message="Le champ du mot de passe doit etre non vide")
+     * @Assert\Length(min="8",minMessage="Le mot de passe doit être un minimum de 8 caractères")
      */
-    private $mdp;
+    private $password;
+
+    /** 
+    * @Assert\EqualTo(propertyPath="password",message="Vous n'avez pas tapé le même mot de passe")
+     */
+    public $mdpC;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="date_naissance", type="date", nullable=false)
-     * @Assert\NotBlank(message=" Le champ du date de naissance doit etre non vide")
+     * @ORM\Column(name="date_naissance", type="date")
+     * @Assert\LessThan("-10 years", message="Age minimal 10 ans")
      */
     private $dateNaissance;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="nom", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ du nom doit etre non vide")
+     * @ORM\Column(name="nom", type="string", length=255)
+     * @Assert\NotBlank(message="Le champ du nom doit etre non vide")
      */
     private $nom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="prenom", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ du prenom doit etre non vide")
+     * @ORM\Column(name="prenom", type="string", length=255)
+     * @Assert\NotBlank(message="Le champ du prenom doit etre non vide")
      */
     private $prenom;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="email", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ de l'email doit etre non vide")
+     * @ORM\Column(name="email", type="string", length=255)
+     * @Assert\NotBlank(message="Le champ de l'email doit etre non vide")
+     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
      */
     private $email;
 
     /**
      * @var int
      *
-     * @ORM\Column(name="tentative", type="integer", nullable=false)
-     * @Assert\Email(message = "The email '{{ value }}' is not a valid email.")
+     * @ORM\Column(name="tentative", type="integer")
      */
     private $tentative;
 
     /**
      * @var \DateTime
      *
-     * @ORM\Column(name="unlock_date", type="date", nullable=false)
+     * @ORM\Column(name="unlock_date", type="date")
      */
     private $unlockDate;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $activation_token;
+
+    /**
+     * @ORM\Column(type="string", length=50, nullable=true)
+     */
+    private $reset_token;
 
     public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getLogin(): ?string
+    public function getUsername()
     {
-        return $this->login;
+        return $this->username;
     }
 
-    public function setLogin(string $login): self
+    public function setUsername(string $username): self
     {
-        $this->login = $login;
+        $this->username = $username;
 
         return $this;
     }
 
-    public function getMdp(): ?string
+    public function getPassword()
     {
-        return $this->mdp;
+        return $this->password;
     }
 
-    public function setMdp(string $mdp): self
+    public function setPassword(string $password): self
     {
-        $this->mdp = $mdp;
+        $this->password = $password;
 
         return $this;
     }
@@ -184,6 +201,50 @@ class Utilisateur
     public function setUnlockDate(\DateTimeInterface $unlockDate): self
     {
         $this->unlockDate = $unlockDate;
+
+        return $this;
+    }
+
+    public function eraseCredentials()
+    {
+        
+    }
+
+    public function getSalt()
+    {
+        
+    }
+
+    public function getRoles()
+    {
+        return ['ROLE_USER'];
+    }
+
+    public function __toString()
+{
+    return $this->username . ', ' . $this->dateNaissance|date('yyyy/mm/dd') . ', '. $this->email . ', ';
+}
+
+    public function getActivationToken(): ?string
+    {
+        return $this->activation_token;
+    }
+
+    public function setActivationToken(?string $activation_token): self
+    {
+        $this->activation_token = $activation_token;
+
+        return $this;
+    }
+
+    public function getResetToken(): ?string
+    {
+        return $this->reset_token;
+    }
+
+    public function setResetToken(?string $reset_token): self
+    {
+        $this->reset_token = $reset_token;
 
         return $this;
     }

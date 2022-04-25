@@ -1,0 +1,71 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block home %}
+{% endblock %}
+
+{% block aboutUs %}
+{% endblock %}
+
+{% block services %}
+{% endblock %}
+
+{% block portfolio %}
+{% endblock %}
+
+{% block team %}
+{% endblock %}
+
+{% block pricing %}
+{% endblock %}
+
+{% block faq %}
+{% endblock %}
+
+{% block contactus %}
+<div class="container-fluid">
+            <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
+                <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
+                    <div class="bg-light rounded p-4 p-sm-5 my-4 mx-3">
+                        <div class="section-title" data-aos="fade-up">
+            <h2>Connexion</h2>
+        </div>
+                        <form action ="{{path('app_utilisateur_login')}}" method="post">
+                        {% if error %}
+                            <div class="alert alert-danger">{{ 'Paramètres invalides' }}</div>
+                        {% endif %}
+                        <div class="form-floating mb-3">
+                            <input type="text" required name="_username" class="form-control" id="floatingInput" placeholder="Login">
+                            <label for="username">Login</label>
+                        </div>
+                        <div class="form-floating mb-4">
+                            <input type="password" required name="_password" class="form-control" id="floatingPassword" placeholder="Mot de passe">
+                            <label for="password">Mot de passe</label>
+                        </div>
+                        <div class="d-flex align-items-center justify-content-between mb-4">
+                            <div class="form-check">
+                                <input type="checkbox" class="form-check-input" id="exampleCheck1" onclick="myFunction()">
+                                <label class="form-check-label" for="exampleCheck1">Show password</label>
+                            </div>
+                            <a href="{{ path('forgotpwd') }}">Mot de passe oublié</a>
+                        </div>
+                        <button type="submit" class="btn btn-primary py-3 w-100 mb-4">Se connecter</button>
+                        </form>
+                        <p class="text-center mb-0">Vous n'êtes pas inscrit? <a href="{{path('app_utilisateur_signup')}}">Créer un compte</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function myFunction() {
+                var x = document.getElementById("floatingPassword");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
+        </script>
+{% endblock %}

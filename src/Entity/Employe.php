@@ -10,7 +10,7 @@ use Doctrine\ORM\Mapping as ORM;
  * @ORM\Table(name="employe", indexes={@ORM\Index(name="id_pointdevente", columns={"id_pointdevente"}), @ORM\Index(name="id", columns={"id"})})
  * @ORM\Entity
  */
-class Employe
+class Employe extends Utilisateur
 {
     /**
      * @var string
@@ -53,24 +53,12 @@ class Employe
         return $this;
     }
 
-    public function getId(): ?Utilisateur
-    {
-        return $this->id;
-    }
-
-    public function setId(?Utilisateur $id): self
-    {
-        $this->id = $id;
-
-        return $this;
-    }
-
-    public function getIdPointdevente(): ?Pointdevente
+    public function getIdPointdevente()
     {
         return $this->idPointdevente;
     }
 
-    public function setIdPointdevente(?Pointdevente $idPointdevente): self
+    public function setIdPointdevente(Pointdevente $idPointdevente): self
     {
         $this->idPointdevente = $idPointdevente;
 

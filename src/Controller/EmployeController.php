@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\Employe;
+use App\Entity\Utilisateur;
 use App\Form\EmployeType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -35,7 +36,7 @@ class EmployeController extends AbstractController
     public function new(Request $request, EntityManagerInterface $entityManager): Response
     {
         $employe = new Employe();
-        $form = $this->createForm(EmployeType::class, $employe);
+        $form = $this->createForm(EmployeType::class);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

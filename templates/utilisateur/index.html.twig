@@ -12,13 +12,13 @@
                          <a href="{{ path('app_utilisateur_new') }}"><i class="fa fa-plus"></i></a>
                     </div>
                     <div class="table-responsive">
-                        <table class="table text-start align-middle table-bordered table-hover mb-0">
+                        <table class="table table-bordered table-hover mb-0" name="usertable" id="usertable">
         <thead>
             <tr>
                 <th>Id</th>
                 <th>Login</th>
-                <th>Mdp</th>
-                <th>DateNaissance</th>
+                <th>Mot de passe</th>
+                <th>Date de naissance</th>
                 <th>Nom</th>
                 <th>Prenom</th>
                 <th>Email</th>
@@ -32,8 +32,8 @@
         {% for utilisateur in utilisateurs %}
             <tr>
                 <td>{{ utilisateur.id }}</td>
-                <td>{{ utilisateur.login }}</td>
-                <td>{{ utilisateur.mdp }}</td>
+                <td>{{ utilisateur.username }}</td>
+                <td>{{ utilisateur.password }}</td>
                 <td>{{ utilisateur.dateNaissance ? utilisateur.dateNaissance|date('Y-m-d') : '' }}</td>
                 <td>{{ utilisateur.nom }}</td>
                 <td>{{ utilisateur.prenom }}</td>
@@ -53,13 +53,57 @@
             </tr>
         {% endfor %}
         </tbody>
-    </div>
                         </table>
 
    
                 </div>
             </div>
+            </div>
             <!-- Recent Sales End -->
+            <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                    {% for i in 1..nbrPage %}
+                    <li class="page-item"><a class="page-link" href="http://127.0.0.1:8000/utilisateur/back/?page={{i}}">{{i}}</a></li>
+                    {% endfor %}
+                    </ul>
+                </nav>
+            
+{% endblock %}
+
+{% block search %}
+                <form class="d-none d-md-flex ms-4">
+                    <input class="form-control border-0" method="post" type="text" id="searchBox" placeholder="Type to search..." oninput="textChanged()"/>
+                </form>
+                <script>
+function textChanged(){
+    // Declare variables
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("searchBox");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("usertable");
+  tr = table.getElementsByTagName("tr");
+
+  // Loop through all table rows, and hide those who don't match the search query
+  for (i = 0; i < tr.length; i++) {
+    if (!tr[i].classList.contains('header')) {
+      td = tr[i].getElementsByTagName("td"),
+      match = false;
+      for (j = 0; j < td.length; j++) {
+        if (td[j].innerHTML.toUpperCase().indexOf(filter) > -1) {
+          match = true;
+          break;
+        }
+      }
+      if (!match) {
+        tr[i].style.display = "none";
+      } else {
+        tr[i].style.display = "";
+      }
+    }
+  }
+}
+</script>
+
 {% endblock %}
 
 {% block form %}
@@ -70,5 +114,7 @@
 {% endblock %}
 {% block messages %}
 {% endblock %}
+
+
 
     
