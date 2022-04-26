@@ -2,9 +2,34 @@
 
 
 {% block body %}
-    <h1>Liste Des produits</h1>
+    <style>
+        #customers {
+            font-family: Arial, Helvetica, sans-serif;
+            border-collapse: collapse;
+            width: 100%;
+        }
 
-        <table class="table" border="1">
+        #customers td, #customers th {
+            border: 1px solid #ddd;
+            padding: 8px;
+        }
+
+        #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+        #customers tr:hover {background-color: #ddd;}
+
+        #customers th {
+            padding-top: 12px;
+            padding-bottom: 12px;
+            text-align: left;
+            background-color: #04AA6D;
+            color: white;
+        }
+
+    </style>
+    <h1>Liste Des produits</h1><hr>
+
+        <table class="table" id="customers" border="1">
 
             <thead>
             <tr>
@@ -16,11 +41,11 @@
                 <th>PrixFinale</th>
 
 
+
             </tr>
             </thead>
             <tbody>
             {% for pp in p|reverse %}
-
                 <tr>
                     <td>{{ pp.nom }}</td>
                     <td>{{ pp.idCategorie.nom }}</td>
@@ -30,19 +55,8 @@
                     <td>{{ pp.prixfinale }}</td>
 
 
-
-
-
-
-
-
-
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-
-
-
-
 {% endblock %}

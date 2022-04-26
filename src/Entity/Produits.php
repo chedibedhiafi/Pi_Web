@@ -28,14 +28,14 @@ class Produits
 
     /**
      * @var string
-     *
+     *@Assert\NotBlank(message="le nom est obligatoire")
      * @ORM\Column(name="nom", type="string", length=256, nullable=false)
      */
     private $nom;
 
     /**
      * @var int
-     *
+     *@Assert\NotBlank(message="le prix est obligatoire")
      * @ORM\Column(name="prix", type="integer", nullable=false)
      */
     private $prix;
@@ -55,14 +55,19 @@ class Produits
 
     /**
      * @var string
-     *
+     *@Assert\NotBlank(message="description est obligatoire")
+     * @Assert\Length(
+     *      min = 7,
+     *      max = 100,
+     *      minMessage = "doit etre >=5 ",
+     *      maxMessage = "doit etre <=300" )
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
      */
     private $description;
 
     /**
      * @var int
-     *
+     *@Assert\NotBlank(message="profit est obligatoire")
      * @ORM\Column(name="profit", type="integer", nullable=false)
      */
     private $profit;
@@ -211,6 +216,7 @@ class Produits
 
         return $this;
     }
+
 
 
 }

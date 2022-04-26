@@ -35,8 +35,9 @@ class CategorieController extends AbstractController
      */
     function Affiche(CategorieRepository $repo ,PaginatorInterface $paginator,Request $request){
         $donnees=$repo->findAll(); //select *
+        $rev=array_reverse($donnees);
         $categorie= $paginator->paginate(
-            $donnees,
+            $rev,
             $request->query->getInt('page',1),3
 
         );

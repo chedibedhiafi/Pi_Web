@@ -2,15 +2,90 @@
 {% extends 'base.html.twig' %}
 
 {% block body %}
+    <style>
+        hr {
+            border: none;
+            border-top: 3px dotted #000000;
+            color: #000000;
+            background-color: #000000;
+            height: 0.5px;
+            width: 100%;
+        }
+    </style>
     <div class="bg-light rounded h-100 p-4">
-        <h6 class="mb-4">Liste des Produits</h6>
+        <h1 class="mb-4" align="center">Liste des Produits</h1>
+        <h3 style="text-align: left; margin-top: 2em; color: #00A8B3"><b>Recherche :</b></h3>
+
+        <div class="sidebar-search">
+
+            <div class="input-group custom-search-form">
+
+                <input  type="text" id="search" class="form-control" placeholder="Recherche Produit" style="display:block ; margin-bottom: 0.5em; height: 2em; text-align: left; font-weight: bold; font-size: 16px" size=188>
+            </div>
+            <!-- /input-group -->
+        </div>
+        <ul class="nav" id="side-menu">
+            <li>
+                            <br>
+                      {#    <a href="#"> Entities<span class="fa arrow"></span></a> #}
+                <ul class="nav nav-second-level" id="entitiesNav">
+                </ul>
+            </li>
+        </ul><br>
+        {#        // Fonction de recherche AJAX + JS + Jquery#}
+        <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+        <script type="text/javascript">
+            jQuery(document).ready(function() {
+                var searchRequest = null;
+                $("#search").keyup(function() {
+                    var minlength = 1;
+                    var that = this;
+                    var value = $(this).val();
+                    var entitySelector = $("#entitiesNav").html('');
+                    if (value.length >= minlength ) {
+                        if (searchRequest != null)
+                            searchRequest.abort();
+                        searchRequest = $.ajax({
+                            type: "GET",
+                            url: "{{ path('ajax_search') }}",
+                            data: {
+                                'q' : value
+                            },
+                            dataType: "text",
+                            success: function(msg){
+                                //we need to check if the value is the same
+                                if (value===$(that).val()) {
+                                    var result = JSON.parse(msg);
+                                    $.each(result, function(key, arr) {
+                                        $.each(arr, function(id, value) {
+                                            if (key === 'produits') {
+                                                if (id !== 'error') {
+                                                    console.log(value[1]);
+                                                    entitySelector.append('<br style="font-size: 14px">Nom:'+value[0]+'<hr></b><li><b style="font-size: 14px">Prix:'+value[5]+'<hr></b><a href="/'+id+'">'+'<img src="/uploads/'+value[4]+'" style="width: 220px; height: 220px; border: 2px solid black" height="200" width="200" border="1px" alt="Image du Produit"/>'+'<hr></a></li><br style="font-size: 14px">Description:'+value[2]+'</br><li><hr><br style="font-size: 14px">Categorie:'+value[6]+'<hr></br><hr>');
+                                                } else {
+                                                    entitySelector.append('<li class="errorLi" style="font-weight: bold;color: #0e0b0b; font-size: 18px">'+value+'</li>');
+
+                                                }
+                                            }
+                                        });
+                                    });
+                                }
+                            }
+
+                        });
+                    }
+                });
+            });
+
+        </script>
         {% for message in app.flashes('info') %}
             <div class="alert alert-success">
                 {{ message }}
             </div>
 
         {% endfor %}
-        <h4 style="font-weight: bold" >Nombre des Produit:({{ p.getTotalItemCount }})</h4>
+        <h6 style="font-weight: bold" >Nombre des Produit:({{ p.getTotalItemCount }})</h6>
         <table class="table" >
 
             <thead>
@@ -18,7 +93,6 @@
                 <th>Nom</th>
                 <th>Categorie</th>
                 <th>Prix</th>
-                <th>Profit</th>
                 <th>Promotion</th>
                 <th>PrixFinale</th>
 
@@ -28,13 +102,17 @@
                 <th>DELETE</th>
                 <th>UPDATE</th>
                 <th>DETAILS</th>
+                <th>Qr-Code</th>
 
 
 
 
 
                 <form action="{{ path('ajout') }}">
-                    <input type="submit" value="AjouterProduit" class="btn btn-primary rounded-pill m-2">
+                    <input type="submit" value="AjouterProduit" class="btn btn-primary w-100 m-2">
+                </form>
+                <form action="{{ path('stats') }}">
+                    <input type="submit" value="Stat Selon Profit" class="btn btn-primary w-100 m-2">
                 </form>
 
 
@@ -45,22 +123,45 @@
             </tr>
             </thead>
             <tbody>
-            {% for pp in p|reverse %}
+            {% set compteur=0 %}
+            {% for pp in p %}
+
+                {% set compteur=compteur+1 %}
 
                 <tr>
                     <td>{{ pp.nom }}</td>
                     <td>{{ pp.idCategorie.nom }}</td>
-                    <td>{{ pp.prix }}</td>
-                    <td>{{ pp.profit }}</td>
-                    <td>{{ pp.idPromotion.percentage }}</td>
-                    <td>{{ pp.prixfinale }}</td>
+                    <td>{{ pp.prix }}TDN</td>
+                    <td>{{ pp.idPromotion.percentage }}%</td>
+                    <td>{{ pp.prixfinale }}TDN</td>
 
 
 
                     <td> <img src="{{ asset('uploads/' ~ pp.getImage())  }}" height="200" width="200"></td>
-                    <td><a href="{{ path('DeleteProduit',{'id':pp.id}) }}"  class="btn btn-danger rounded-pill m-2" >DELETE</a> </td>
+                    <td><a href="{{ path('DeleteProduit',{'id':pp.id}) }}"  class="btn btn-danger rounded-pill m-2" onclick="return confirm('Êtes-vous sûr de bien vouloir supprimer cet élément?')" >DELETE</a> </td>
                     <td><a href="{{ path('UU',{'id':pp.id}) }}" class="btn btn-success rounded-pill m-2">UPDATE</a> </td>
                     <td><a href="{{ path('details', {'id': pp.id}) }}" class="btn btn-primary rounded-pill m-2">DETAILS</a></td>
+                    <td>
+                        <a onclick="showQr(this.id)" id="qr{{ compteur }}" class="btn rounded-pill btn-primary">Créer le code QR</a>
+                        <img id="image_qr{{ compteur }}" style="width: 120px;height: 120px; display: none;"
+                             src="{{ qr_code_data_uri("*** Produit : "~pp.nom~"\n*** Reference : "~pp.description~"\n*** Prix : "~pp.prix~"\n*** Promotion : "~pp.idpromotion.percentage~"\n*** PrixFinale : "~pp.prixfinale~"\n*** Categorie : "~pp.idCategorie.nom) }}" /></td>
+
+                    <script >
+                        function showQr(id) {
+                            var qr = document.getElementById(id);
+                            var img = document.getElementById('image_'+id);
+                            // console.log(qr);
+                            console.log(img);
+                            if (img.style.display == "none") {
+                                img.style.display = "block";
+                                qr.style.display="none";
+                            } else {
+                                img.style.display = "none";
+                            }
+                            console.log(img);
+                        }
+
+                    </script>
 
 
 
@@ -72,13 +173,12 @@
             </tbody>
         </table>
 
-        <form action="{{ path('stats') }}">
-            <input type="submit" value="stat" class="btn btn-primary rounded-pill m-2">
-        </form>
-        <td><a href="{{ path('listp') }}"  class="btn btn-primary rounded-pill m-2" >Imprimer PDF</a> </td>
+        <td><a href="{{ path('listp') }}"  class="btn btn-primary w-100 m-2">Imprimer PDF</a> </td>
+        <td><a href="{{ path('excel') }}"  class="btn btn-primary w-100 m-2">Generer Excel</a> </td>
 
     </div>
-    {{ knp_pagination_render(p) }}
+
+    <button type="button" class="btn btn-secondary">{{ knp_pagination_render(p) }}</button>
 
 
 {% endblock %}

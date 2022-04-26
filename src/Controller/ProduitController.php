@@ -2,10 +2,13 @@
 
 namespace App\Controller;
 
+use App\Data\SearchData;
 use App\Entity\Categorie;
 use App\Entity\Produits;
 use App\Form\CategorieForumType;
 use App\Form\ProduitType;
+use App\Form\SearchFormmType;
+use App\Form\SearchFormType;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitsRepository;
 use Knp\Component\Pager\PaginatorInterface;
@@ -18,7 +21,16 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Doctrine\ORM\EntityRepository;
 use Dompdf\Dompdf;
 use Dompdf\Options;
-
+use Endroid\QrCode\Builder\BuilderInterface;
+use Endroid\QrCode\QrCode;
+use Endroid\QrCode\Color\Color;
+use Endroid\QrCode\Encoding\Encoding;
+use Endroid\QrCode\ErrorCorrectionLevel\ErrorCorrectionLevelHigh;
+use Endroid\QrCode\Label\Alignment\LabelAlignmentCenter;
+use Endroid\QrCode\Label\Margin\Margin;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 
 
 
@@ -36,6 +48,77 @@ class ProduitController extends AbstractController
         ]);
     }
     /**
+     * @param Request $request
+     * @param ProduitsRepository $repo
+     * @return Response
+     * @Route ("/recherche/", name="ajax_search")
+     */
+
+    public function searchAction(Request $request, ProduitsRepository $repo)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $requestString = $request->get('q');
+        $produits =  $repo->findEntitiesByString($requestString);
+        if(!$produits) {
+            $result['produits']['error'] = "Produit n'existe pas!";
+        } else {
+            $result['produits'] = $this->getRealEntities($produits);
+        }
+        return new Response(json_encode($result));
+    }
+    public function getRealEntities($produits ){
+        foreach ($produits as $produits){
+            $realEntities[$produits->getId()] = [$produits->getNom(),$produits->getPrix(),$produits->getDescription(),$produits->getIdPromotion()->getPercentage()
+                ,$produits->getImage(),$produits->getPrixFinale(),$produits->getIdCategorie()->getNom()];
+        }
+        return $realEntities;
+    }
+    /**
+     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
+     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @Route ("/generateExcel", name="excel")
+     */
+
+    public function generateExcel(ProduitsRepository $prodrepo){
+
+        $produits = $prodrepo->findAll();
+        $spreadsheet = new Spreadsheet();
+
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Nom');
+        $sheet->setCellValue('C1', 'PrixFinale');
+        $sheet->setCellValue('D1', 'Description');
+        $sheet->setCellValue('F1', 'Promotion');
+        $sheet->setCellValue('H1', 'Profit');
+        $sheet->setCellValue('G1', 'Catégorie');
+        $sn=1;
+        foreach ($produits as $p) {
+
+            $sheet->setCellValue('A'.$sn,$p->getNom());
+            $sheet->setCellValue('C'.$sn,$p->getPrixfinale());
+            $sheet->setCellValue('H'.$sn,$p->getProfit());
+            $sheet->setCellValue('D'.$sn,$p->getDescription());
+            $sheet->setCellValue('F'.$sn,$p->getIdPromotion()->getPercentage());
+            $sheet->setCellValue('G'.$sn,$p->getIdCategorie()->getNom());
+            $sn++;
+
+        }
+        $writer = new Xlsx($spreadsheet);
+        $fileName = 'produits.xlsx';
+        $temp_file = tempnam(sys_get_temp_dir(), $fileName);
+        $writer->save($temp_file);
+        return $this->file($temp_file, $fileName, ResponseHeaderBag::DISPOSITION_INLINE);
+    }
+
+    /**
+     * @return void
+     * @Route("/qrCode", name="qr_function")
+     */
+    public function genQrCode(ProduitsRepository $repo){
+
+        return $this->render('produit/qrcode.html.twig');
+    }
+    /**
      * @Route("/stats", name="stats")
      */
     public function stat(ProduitsRepository $prodrepo){
@@ -47,7 +130,7 @@ class ProduitController extends AbstractController
         foreach ($produits as $produit){
 
             $prodNom[] = $produit->getNom();
-            $prodPrix[] = $produit->getPrixfinale();
+            $prodPrix[] = $produit->getProfit();
 
         }
 
@@ -65,9 +148,11 @@ class ProduitController extends AbstractController
      */
     function Affiche(Request $request ,ProduitsRepository $repo,PaginatorInterface $paginator)
     {
+
         $donnees=$repo->findAll(); //select *
+        $rev=array_reverse($donnees);
         $produit= $paginator->paginate(
-            $donnees,
+            $rev,
             $request->query->getInt('page',1),3
 
         );
@@ -106,7 +191,7 @@ class ProduitController extends AbstractController
         $dompdf->render();
 
         // Output the generated PDF to Browser (force download)
-        $dompdf->stream("mypdf.pdf", [
+        $dompdf->stream("ListeDesProduits.pdf", [
             "Attachment" => true
         ]);
 
@@ -121,9 +206,23 @@ class ProduitController extends AbstractController
      * @return Response
      * @Route("/AfficheFront",name="AfficheFront")
      */
-    function AfficheFront(ProduitsRepository $repo){
-        $produit=$this->sort($repo);
-        return $this->render('produit/AfficheFront.html.twig',['p'=>$produit]);
+    function AfficheFront(ProduitsRepository $repo ,Request $request,PaginatorInterface $paginator){
+
+        $data = new SearchData();
+        $form = $this->createForm(SearchFormmType::class,$data);
+        $form->handleRequest($request);
+
+
+        $produit=$repo ->findSearch($data);
+        $produit = $paginator->paginate(
+            $produit,
+            $request->query->getInt('page', 1),
+            3
+        );
+        return $this->render('produit/AfficheFront.html.twig',[
+            'p'=>$produit,
+        'form' => $form->createView()
+        ]);
 
 
     }
@@ -158,7 +257,7 @@ class ProduitController extends AbstractController
             $em->flush();
             $this->addFlash(
                 'info',
-                'Added Successfully!'
+                'Ajouté avec succès !'
             );
             return $this->redirectToRoute('AA');
         }
@@ -211,7 +310,7 @@ class ProduitController extends AbstractController
             $em->flush();
             $this->addFlash(
                 'info',
-                'updated Successfully!'
+                'Mis à jour avec succés!'
             );
             return $this->redirectToRoute('AA');
         }

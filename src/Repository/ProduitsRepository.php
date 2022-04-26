@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Data\SearchData;
 use App\Entity\Produits;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\ORM\OptimisticLockException;
@@ -43,6 +44,59 @@ class ProduitsRepository extends ServiceEntityRepository
         if ($flush) {
             $this->_em->flush();
         }
+    }
+
+    /**
+     * @return Produits[]
+     */
+    public function findSearch(SearchData $search):array{
+        $query =$this
+            ->createQueryBuilder('p')
+            ->select('c','p')
+           ->join('p.idCategorie','c');
+        if (!empty($search->q)){
+
+            $query =$query
+                ->andWhere('p.nom LIKE :q')
+                ->setParameter('q',"%{$search->q}%");
+        }
+        if(!empty($search->min)){
+
+            $query =$query
+                ->andWhere('p.prixfinale >= :min')
+                ->setParameter('min',$search->min);
+        }
+        if(!empty($search->max)){
+
+            $query =$query
+                ->andWhere('p.prixfinale <= :max')
+                ->setParameter('max',$search->max);
+        }
+        if(!empty($search->categories)){
+
+           $query =$query
+                ->andWhere('c.id IN (:categories)')
+                ->setParameter('categories',$search->categories);
+       }
+
+
+        return $query->getQuery()->getResult();
+
+
+    }
+    public function findEntitiesByString($str){
+        return $this->getEntityManager()
+            ->createQuery(
+                'SELECT p
+                FROM App\Entity\Produits p
+                WHERE p.nom LIKE :str 
+                OR p.profit LIKE :str  
+                OR p.prix LIKE :str  
+                OR p.prixfinale LIKE :str  
+                OR p.description LIKE :str'
+            )
+            ->setParameter('str', '%'.$str.'%')
+            ->getResult();
     }
 
     // /**

@@ -8,7 +8,9 @@
 
 {% block body %}
 
-    <canvas id="categorie" width="10" height="10"></canvas>
+    <div class="chart-container" style="position: relative; height:60vh; width:47vw; margin: 0 auto;aspect-ratio: auto">
+        <canvas style="aspect-ratio: auto"  id="categorie"></canvas>
+    </div>
 
 
 {% endblock %}
@@ -20,13 +22,13 @@
     <script>
         let categorie = document.querySelector("#categorie")
         let categGraph = new Chart(categorie,{
-            type:"pie",
+            type:"bar",
             data:{
                 labels:{{ prodNom|raw }},
                 datasets:[{
-                    label:"repartision produit selon prix",
+                    label:"repartision produit selon profit",
                     data: {{ prodPrix|raw }},
-                    backgroundColor:["yellow","green","blue","red","black"]
+                    backgroundColor:["yellow","green","blue","red","grey","black","brown","gold"]
 
 
                 }]

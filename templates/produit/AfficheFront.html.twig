@@ -8,71 +8,95 @@
 
 
 {% block home %}
+    <html>
+    <head>
+    <style>
+        .card {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+    max-width: 300px;
+    margin: auto;
+    text-align: center;
+    font-family: arial;
+    }
+
+    .price {
+    color: grey;
+    font-size: 22px;
+    }
+
+    .card button {
+    border: none;
+    outline: 0;
+    padding: 12px;
+    color: white;
+    background-color: #000;
+    text-align: center;
+    cursor: pointer;
+    width: 100%;
+    font-size: 18px;
+    }
+
+
+    .card button:hover {
+    opacity: 0.7;
+    }
+
+    </style>
+    <body>
 
 
     <h1 style = "margin-top : 40px; text-align:center ;font-weight: bold; color:  #00A9CC">Liste des Produits</h1>
 
-
-    <section class="pricing-table section" id="pricing">
-        <div class="container" >
-            <div class="row">
-                <div class="col-md-12" style="border-radius: 20em">
-                    <div class="tab-content" id="pills-tabContent">
-                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                            <div class="row">
-
-
-
-                                <form action="{{ path('RechercheFront') }}">
-                                    <input type="text" placeholder="nom" name="nom" class="form-control">
-                                    <input type="submit" value="Recherche" class="btn btn-primary rounded-pill m-2">
-                                </form>
-
-                                {% for pp in p %}
-
-                                    <div class="col-md-4 col-sm-6 col-xs-12"  style="border-radius: 20em">
-                                        <div class="pricing-item" style="height: 600px; border-radius: 10px">
-                                            <h3>{{ pp.nom }}</h3>
-                                            <div class="price" >
-                                                <span>Promotion  : {{ pp.idPromotion.percentage }}% </span>
-                                            </div>
-                                            <div class="pricing-body" >
-                                                <span>Prix:</span>
-                                                <div class="price" >
-
-                                                    <span style="float: left; display: inline-block;margin-right: 1em; text-decoration: line-through">{{ pp.prix }} TND</span>
-
-                                                    <span style="float: right; display: inline-block"> {{ pp.prixfinale }} TND</span>
-                                                    <br>
-                                                </div>
-
-                                                <div class="price" >
-                                                    <span>Categorie  : {{ pp.idCategorie.nom }} </span>
-                                                </div>
-                                                <div class="progress" data-percent="45%">
-                                                    <div class="progress-bar"></div>
-                                                </div>
-
-                                                <td> <img src="{{ asset('uploads/' ~ pp.getImage())  }}" height="200" width="200"></td>                                                <div class="progress" data-percent="45%">
-                                                    <div class="progress-bar"></div>
-                                                </div>
-                                                <p>Description  : {{ pp.description }}</p>
-                                                <div class="progress" data-percent="45%">
-                                                    <div class="progress-bar"></div>
-                                                </div>
-                                                <br>
-                                                <div class="progress" data-percent="45%">
-                                                    <div class="progress-bar"></div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                {% endfor %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-3" >
+                {% include 'produit/_filter.html.twig' with {form: form} only %}
             </div>
-        </div> <!-- End container -->
-    </section>
+
+
+            <div class="col-9">
+
+
+                {% for pp in p %}
+
+
+                    <div class="card">
+                        <img src="{{ asset('uploads/' ~ pp.getImage())  }}" height="300" width="297">
+                        <h5 style="color: #18d26e" >Nom de Produit:</h5>
+                        <h6> {{ pp.nom}}</h6>
+                        <h5 style="color: #18d26e" >Categorie:</h5>
+                        <h6>{{ pp.idCategorie.nom }}</h6>
+                        <h5 style="color: #18d26e" >Promotion:</h5>
+                        <h6>{{ pp.idpromotion.percentage }}%</h6>
+                        <h5 style="color: #18d26e" >Prix:</h5>
+                        <h5 class="price" style="float: left; display: inline-block;margin-right: 1em; text-decoration: line-through">{{ pp.prix }}TDN</h5>
+                        <h6 class="price">{{ pp.prixfinale}}TDN</h6>
+                        <h5 style="color: #18d26e" >Description:</h5>
+                        <h6>{{ pp.description }}</h6>
+
+
+                        <p><button>Add to Cart</button></p>
+                    </div>
+                {% endfor %}
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    </body>
+    </html>
+
+    <div style="margin-left: 35em">
+
+
+
+
+<button type="button" class="btn btn-secondary"> {{ knp_pagination_render(p) }}   <div class="pagination">
+
+</button>
+    </div>
 {% endblock %}
