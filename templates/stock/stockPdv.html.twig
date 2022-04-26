@@ -1,0 +1,101 @@
+{% extends 'back.html.twig' %}
+
+{% block title %}
+	Stock
+{% endblock %}
+
+{% block stylesheets %}{% endblock %}
+
+{% block sale %}{% endblock %}
+
+{% block table %}{% endblock %}
+
+{% block widgets %}
+	<br>
+	<div class="bg-light text-center rounded p-4">
+		<div class="d-flex  align-items-center mb-4">
+			<h6 class="mb-0" style="margin-right: 10px;">Edit in Stock</h6>
+			<a href="{{ path('app_historiquestock_new', {'reference': pointdevente}) }}">
+				<i class="fa fa-plus" aria-hidden="true"></i>
+
+			</a>
+
+
+		</div>
+		<br>
+		<div class="d-flex  align-items-center mb-4">
+		
+			<h6 class="mb-0" style="margin-right: 10px;">Generate PDF</h6>
+			<br>
+			<select class="form-select mb-3"  id="monthe" name="monthe" onchange="onCBchanged()">
+								{% set months = range(01, 12)  %}
+							
+								{% for month in months %} 
+								<option value="0">{{month}}</option>
+								{% endfor %}
+							</select>	
+							{% set years = range(2022, 1990)  %}
+							<select class="form-select mb-3" id="yeare" name="yeare" onchange="onCBchanged()">
+							
+								{% for year in years %} 
+								<option value="0">{{year}}</option>
+								
+								{% endfor %}
+							</select>
+							<div id="theButton">
+			<a href="{{ path('generatePDF', {'reference' : pointdevente, 'date': "04-2022" }) }}">
+				<button type="button" class="btn btn-primary ms-2">Generate</button>
+
+			</a></div>
+		</div>
+	</div>
+
+	<script>
+	
+	function onCBchanged(){
+		
+		 month = $("#monthe").text;
+		
+		 year = $("#yeare").text;
+		 datee = month.'-'.year;
+		$("#theButton").html('<a href="{{ path('generatePDF', {'reference' : pointdevente, 'date': "03-2022" }) }}"><button type="button" class="btn btn-primary ms-2">Add</button></a>');
+
+	}
+	</script>
+	
+{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}
+
+
+	<div class="container-fluid pt-4 px-4">
+		<div class="row g-4">
+			{% for stock in stocks %}
+				<div class="col-sm-6 col-xl-3">
+					<div class="bg-light rounded d-flex align-items-center justify-content-between p-4">
+						<img src="{{asset('front/img/products/'~stock.idProduit.image~'')}}" style="width: 120px;height: 120px;">
+						<div class="ms-3">
+							<p class="mb-2">
+								<b>{{ stock.idProduit }}</b>
+							</p>
+							<p>Quantite
+								<h6 style="color : #4ee44e;">{{ stock.quantite }}</h6>
+							</p>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
+
+
+{% endblock %}

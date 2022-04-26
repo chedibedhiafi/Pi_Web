@@ -3,16 +3,12 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
-use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * Pointdevente
  *
  * @ORM\Table(name="pointdevente")
  * @ORM\Entity
- * @UniqueEntity(fields={"name"}, message="Cet intervenant existe  déjà  .")
-
  */
 class Pointdevente
 {
@@ -29,7 +25,6 @@ class Pointdevente
      * @var string
      *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ du nom doit etre non vide")
      */
     private $name;
 
@@ -37,7 +32,6 @@ class Pointdevente
      * @var string
      *
      * @ORM\Column(name="proprietaire", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ du proprietaire doit etre non vide")
      */
     private $proprietaire;
 
@@ -45,7 +39,6 @@ class Pointdevente
      * @var string
      *
      * @ORM\Column(name="adresse", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ de l'adresse doit etre non vide")
      */
     private $adresse;
 
@@ -53,29 +46,32 @@ class Pointdevente
      * @var \DateTime
      *
      * @ORM\Column(name="date_ouverture", type="date", nullable=false)
-     * @Assert\NotBlank(message=" Le champ de la date d'ouverture doit etre non vide")
      */
     private $dateOuverture;
 
     /**
      * @var string
      *
-     * @ORM\Column(name="longitude", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ de la longitude doit etre non vide")
+     * @ORM\Column(name="longitude", type="string", length=255, nullable=false, options={"default"="'36.79919469665419'"})
      */
-    private $longitude;
+    private $longitude = '\'36.79919469665419\'';
 
     /**
      * @var string
      *
-     * @ORM\Column(name="latitude", type="string", length=255, nullable=false)
-     * @Assert\NotBlank(message=" Le champ de la latitude doit etre non vide")
+     * @ORM\Column(name="latitude", type="string", length=255, nullable=false, options={"default"="'10.186024805970863'"})
      */
-    private $latitude;
+    private $latitude = '\'10.186024805970863\'';
 
     public function getReference(): ?int
     {
         return $this->reference;
+    }
+
+    public function setReference(int $reference): self
+    {
+        $this->reference = $reference;
+        return $this;
     }
 
     public function getName(): ?string
@@ -150,5 +146,8 @@ class Pointdevente
         return $this;
     }
 
+    public function __toString() {
+        return $this->getName();
+    }
 
 }

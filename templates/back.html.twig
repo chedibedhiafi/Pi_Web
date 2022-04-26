@@ -9,7 +9,7 @@
 		</title>
 		{# Run `composer require symfony/webpack-encore-bundle`
 		           and uncomment the following Encore helpers to start using Symfony UX #}
-		{% block stylesheets %}
+		
 			<!-- Google Web Fonts -->
 			<link rel="preconnect" href="https://fonts.googleapis.com">
 			<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,6 +32,8 @@
 
 			<!-- Template Stylesheet -->
 			<link href="{{asset('back/css/style.css')}}" rel="stylesheet">
+			 <link href="{{asset('front/css/map.css')}}" rel="stylesheet">
+		{% block stylesheets %}
 		{% endblock %}
 
 		{% block javascripts %}
@@ -45,6 +47,7 @@
 			<script src="{{asset('back/lib/tempusdominus/js/moment.min.js')}}"></script>
 			<script src="{{asset('back/lib/tempusdominus/js/moment-timezone.min.js')}}"></script>
 			<script src="{{asset('back/lib/tempusdominus/js/tempusdominus-bootstrap-4.min.js')}}"></script>
+			
 
 			<!-- Template Javascript -->
 			<script src="{{asset('back/js/main.js')}}"></script>

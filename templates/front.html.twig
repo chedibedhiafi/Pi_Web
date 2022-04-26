@@ -24,9 +24,15 @@
   <link href="{{asset('front/vendor/glightbox/css/glightbox.min.css')}}" rel="stylesheet">
   <link href="{{asset('front/vendor/remixicon/remixicon.css')}}" rel="stylesheet">
   <link href="{{asset('front/vendor/swiper/swiper-bundle.min.css')}}" rel="stylesheet">
+  <link href="{{asset('front/css/card.css')}}" rel="stylesheet">
+  <link href="{{asset('front/css/map.css')}}" rel="stylesheet">
 
   <!-- Template Main CSS File -->
   <link href="{{asset('front/css/style.css')}}" rel="stylesheet">
+
+  <!-- Leaflet -->
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.css" />
 
   <!-- =======================================================
   * Template Name: Vesperr - v4.7.0
@@ -89,14 +95,14 @@
     <div class="container">
       <div class="row">
         <div class="col-lg-6 pt-5 pt-lg-0 order-2 order-lg-1 d-flex flex-column justify-content-center">
-          <h1 data-aos="fade-up">Grow your business with Vesperr</h1>
-          <h2 data-aos="fade-up" data-aos-delay="400">We are team of talented designers making websites with Bootstrap</h2>
+          <h1 data-aos="fade-up">Get the latest technology with QUANTECH</h1>
+          <h2 data-aos="fade-up" data-aos-delay="400">Your n°1 tech provider</h2>
           <div data-aos="fade-up" data-aos-delay="800">
-            <a href="#about" class="btn-get-started scrollto">Get Started</a>
+            <a href="#Portfolio" class="btn-get-started scrollto">Our Products</a>
           </div>
         </div>
         <div class="col-lg-6 order-1 order-lg-2 hero-img" data-aos="fade-left" data-aos-delay="200">
-          <img src="{{asset('front/img/hero-img.png')}}" class="img-fluid animated" alt="">
+          <img src="{{asset('front/img/hero-img.jpg')}}" class="img-fluid animated" alt="">
         </div>
       </div>
     </div>
@@ -114,27 +120,27 @@
         <div class="row">
 
           <div class="col-lg-2 col-md-4 col-6">
-            <img src="{{asset('front/img/clients/client-1.png')}}" class="img-fluid" alt="" data-aos="zoom-in">
+            <img src="{{asset('front/img/clients/Dell-Logo.png')}}" class="img-fluid" alt="" data-aos="zoom-in">
           </div>
 
           <div class="col-lg-2 col-md-4 col-6">
-            <img src="{{asset('front/img/clients/client-2.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
+            <img src="{{asset('front/img/clients/JBL-logo.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="100">
           </div>
 
           <div class="col-lg-2 col-md-4 col-6">
-            <img src="{{asset('front/img/clients/client-3.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="200">
+            <img src="{{asset('front/img/clients/razer-logo.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="200">
           </div>
 
           <div class="col-lg-2 col-md-4 col-6">
-            <img src="{{asset('front/img/clients/client-4.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="300">
+            <img src="{{asset('front/img/clients/TOSHIBA_Logo.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="300">
           </div>
 
           <div class="col-lg-2 col-md-4 col-6">
-            <img src="{{asset('front/img/clients/client-5.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="400">
+            <img src="{{asset('front/img/clients/hp.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="400">
           </div>
 
           <div class="col-lg-2 col-md-4 col-6">
-            <img src="{{asset('front/img/clients/client-6.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="500">
+            <img src="{{asset('front/img/clients/acer-logo.png')}}" class="img-fluid" alt="" data-aos="zoom-in" data-aos-delay="500">
           </div>
 
         </div>
@@ -145,6 +151,7 @@
     <!-- End Clients Section -->
 
     <!-- ======= About Us Section ======= -->
+    
     {% block aboutUs %}
     <section id="about" class="about">
       <div class="container">
@@ -231,6 +238,8 @@
       </div>
     </section>
     {% endblock %}
+    {% block script %}
+{% endblock %}
     <!-- End Counts Section -->
 
     <!-- ======= Services Section ======= -->
@@ -1025,3 +1034,4 @@
 </body>
 
 </html>
+

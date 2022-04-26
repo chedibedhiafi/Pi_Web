@@ -8,7 +8,10 @@
 {% block sale %}{% endblock %}
 
 {% block table %}
-	<div class="container-fluid pt-4 px-4">
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+	<div class="container-fluid pt-4">
 
 		<div class="bg-light text-center rounded p-4">
 
@@ -32,7 +35,7 @@
 							<th>Longitude</th>
 							<th>Latitude</th>
 							<th>Show</th>
-                            <th>Edit</th>
+							<th>Edit</th>
 						</tr>
 					</thead>
 					<tbody>
@@ -67,9 +70,27 @@
 
 			</div>
 
+
 		</div>
+		
+			{# <div class="bg-light rounded h-100 p-4">
+                            <iframe class="position-relative rounded w-100 h-100" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0">
+										<div id='map'></div>
+										<script language="javascript" src="{{asset('front/js/map.js')}}"/>
+			{% for pointdevente in pointdeventes %}
+				<script>
+					addMarker({{ pointdevente.longitude }}, {{ pointdevente.latitude }})
+				</script>
+			{% endfor %}
+							</iframe>
+                        </div> #}
+
+			
+
 
 	</div>
+
+	
 
 {% endblock %}
 
@@ -84,5 +105,4 @@
 {% endblock %}
 #}{% endblock %}
 
-{% block form %}
-{% endblock %}
+{% block form %}{% endblock %}

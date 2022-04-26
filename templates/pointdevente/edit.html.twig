@@ -21,19 +21,30 @@
 #}{% endblock %}
 
 {% block form %}
-	<div class="container-fluid pt-4 px-4" align="center">
+	<div class="container-fluid pt-4 px-4">
+		<div class="row g-4">
 
-		
+			<div class="col-sm-12 col-xl-6">
+				<div class="bg-light rounded h-100 p-4">
 
-			<div class="bg-light rounded h-100 p-4" align="center">
-				<h6 class="mb-4">Create new Point de vente</h6>
+					<a href="{{ path('app_pointdevente_index') }}">
+						<i class="fas fa-arrow-alt-circle-left"></i>
+					</a>
+					<br><br>
+					<h6 class="mb-4">Create new Point de vente</h6>
 
-				{{ include('pointdevente/_form.html.twig', {'button_label': 'Update'}) }}
+					{{ include('pointdevente/_form.html.twig', {'button_label': 'Update'}) }}
 
-				<a href="{{ path('app_pointdevente_index') }}"><i class="fas fa-arrow-alt-circle-left"></i></a>
 
-				{{ include('pointdevente/_delete_form.html.twig') }}
+					{{ include('pointdevente/_delete_form.html.twig') }}
+					<a href="{{ path('app_stock_showStock' , {'reference':pointdevente.reference}) }}" >
+						edit in stock
+					</a>
+
+				</div>
 			</div>
-		
+
+		</div>
+
 	</div>
 {% endblock %}
