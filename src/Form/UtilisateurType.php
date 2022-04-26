@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Captcha\Bundle\CaptchaBundle\Form\Type\CaptchaType;
+use Captcha\Bundle\CaptchaBundle\Validator\Constraints\ValidCaptcha;
 
 class UtilisateurType extends AbstractType
 {
@@ -22,7 +24,14 @@ class UtilisateurType extends AbstractType
             ->add('mdpC',PasswordType::class,array('label' => 'Confirmation du mot de passe', 'attr' => array('class' => 'form-control','placeholder' => 'Veuillez confirmer le mot de passe')))
             ->add('dateNaissance' ,DateType::class,array('label' => 'Date de naissance','widget' => 'single_text'))
             ->add('email',TextType::class ,array('label' => 'Email', 'attr' => array('class' => 'form-control','placeholder' => 'Email')))
-            
+            ->add('captchaCode', CaptchaType::class, array(
+                'captchaConfig' => 'ExampleCaptchaUserRegistration',
+                'constraints' => [
+                    new ValidCaptcha([
+                        'message' => 'Invalid captcha, please try again',
+                    ]),
+                ],
+            ))
         ;
     }
 
