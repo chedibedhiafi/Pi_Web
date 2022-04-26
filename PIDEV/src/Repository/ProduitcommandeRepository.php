@@ -9,6 +9,8 @@ use Doctrine\ORM\ORMException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
+ * @extends ServiceEntityRepository<Produitcommande>
+ *
  * @method Produitcommande|null find($id, $lockMode = null, $lockVersion = null)
  * @method Produitcommande|null findOneBy(array $criteria, array $orderBy = null)
  * @method Produitcommande[]    findAll()

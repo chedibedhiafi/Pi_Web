@@ -17,10 +17,8 @@ class Livraison
      * @ORM\Column(type="integer")
      */
     private $id;
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $id_commande;
+
+
 
 
     /**
@@ -35,10 +33,53 @@ class Livraison
      */
     private $num_livreur;
 
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    /**
+     * @ORM\OneToOne(targetEntity=Commande::class, inversedBy="livraison", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commande;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $etat_livraison;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $adresse;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $pays;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $ville;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $code_postal;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $numero_telephone;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $commentaire;
+
+
+
+
+
+
+
 
 
 
@@ -66,16 +107,107 @@ class Livraison
         return $this;
     }
 
-    public function getIdCommande(): ?int
+    public function getCommande(): ?Commande
     {
-        return $this->id_commande;
+        return $this->commande;
     }
 
-
-    public function setIdCommande( int $id_commande): self
+    public function setCommande(Commande $commande): self
     {
-        $this->id_commande = $id_commande;
+        $this->commande = $commande;
+
         return $this;
     }
+
+    public function getEtatLivraison(): ?string
+    {
+        return $this->etat_livraison;
+    }
+
+    public function setEtatLivraison(string $etat_livraison): self
+    {
+        $this->etat_livraison = $etat_livraison;
+
+        return $this;
+    }
+
+    public function getAdresse(): ?string
+    {
+        return $this->adresse;
+    }
+
+    public function setAdresse(string $adresse): self
+    {
+        $this->adresse = $adresse;
+
+        return $this;
+    }
+
+    public function getPays(): ?string
+    {
+        return $this->pays;
+    }
+
+    public function setPays(string $pays): self
+    {
+        $this->pays = $pays;
+
+        return $this;
+    }
+
+    public function getVille(): ?string
+    {
+        return $this->ville;
+    }
+
+    public function setVille(string $ville): self
+    {
+        $this->ville = $ville;
+
+        return $this;
+    }
+
+    public function getCodePostal(): ?string
+    {
+        return $this->code_postal;
+    }
+
+    public function setCodePostal(string $code_postal): self
+    {
+        $this->code_postal = $code_postal;
+
+        return $this;
+    }
+
+    public function getNumeroTelephone(): ?int
+    {
+        return $this->numero_telephone;
+    }
+
+    public function setNumeroTelephone(int $numero_telephone): self
+    {
+        $this->numero_telephone = $numero_telephone;
+
+        return $this;
+    }
+
+    public function getCommentaire(): ?string
+    {
+        return $this->commentaire;
+    }
+
+    public function setCommentaire(string $commentaire): self
+    {
+        $this->commentaire = $commentaire;
+
+        return $this;
+    }
+
+
+
+
+
+
+
 
 }

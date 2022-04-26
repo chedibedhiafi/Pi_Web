@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\CommandeRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -44,6 +46,19 @@ class Commande
      * @ORM\Column(type="float")
      */
     private $tva;
+
+
+    /**
+     * @ORM\OneToOne(targetEntity=Livraison::class, mappedBy="commande", cascade={"persist", "remove"})
+     */
+    private $livraison;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Produitcommande::class, inversedBy="commande")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $commande;
+
 
     public function getId(): ?int
     {
@@ -99,4 +114,37 @@ class Commande
 
         return $this;
     }
+
+    public function getLivraison(): ?Livraison
+    {
+        return $this->livraison;
+    }
+
+    public function setLivraison(Livraison $livraison): self
+    {
+        // set the owning side of the relation if necessary
+        if ($livraison->getCommande() !== $this) {
+            $livraison->setCommande($this);
+        }
+
+        $this->livraison = $livraison;
+
+        return $this;
+    }
+
+    public function getCommande(): ?Produitcommande
+    {
+        return $this->commande;
+    }
+
+    public function setCommande(?Produitcommande $commande): self
+    {
+        $this->commande = $commande;
+
+        return $this;
+    }
+
+
+
+
 }

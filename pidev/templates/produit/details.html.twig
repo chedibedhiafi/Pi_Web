@@ -1,0 +1,50 @@
+
+
+{% extends 'base.html.twig' %}
+{% block body %}
+    <table class="table">
+        <tbody>
+        <tr>
+            <th>Id</th>
+            <td>{{ produit.id }}</td>
+        </tr>
+        <tr>
+            <th>Nom</th>
+            <td>{{ produit.nom }}</td>
+        </tr>
+        <tr>
+            <th>Prix</th>
+            <td>{{ produit.prix }}</td>
+        </tr>
+        <tr>
+            <th>PrixFinale</th>
+            <td>{{ produit.prixfinale }}</td>
+        </tr>
+        <tr>
+            <th>Description</th>
+            <td>{{ produit.description }}</td>
+        </tr>
+        <tr>
+            <th>Profit</th>
+            <td>{{ produit.profit }}</td>
+        </tr>
+        <tr>
+            <th>Categorie</th>
+            <td>{{ produit.idCategorie.nom }}</td>
+        </tr>
+        <tr>
+            <th>Promotion</th>
+            <td>{{ produit.idPromotion.percentage }}</td>
+        </tr>
+        <tr>
+            <th>Image</th>
+            <td> <img src="{{ asset('uploads/' ~ produit.getImage())  }}"></td>
+        </tr>
+        </tbody>
+    </table>
+    <form action="{{ path('AA') }}">
+        <input type="submit" value="Back" class="btn btn-primary rounded-pill m-2">
+    </form>
+
+
+{% endblock %}

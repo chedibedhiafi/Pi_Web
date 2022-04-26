@@ -1,0 +1,46 @@
+
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="bg-light rounded h-100 p-4">
+        <h6 class="mb-4">Liste des Categorie</h6>
+        {% for message in app.flashes('info') %}
+            <div class="alert alert-success">
+                {{ message }}
+            </div>
+
+{% endfor %}
+        <h4 style="font-weight: bold" >Nombre des Catégorie:({{ cc.getTotalItemCount }})</h4>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>DELETE</th><th>UPDATE</th>
+                <form action="{{ path('ajoutCategorie') }}" >
+                    <input type="submit" value="AjouterCategorie" class="btn btn-primary rounded-pill m-2">
+
+
+            </tr>
+            </thead>
+            <tbody>
+            {% for c in cc|reverse %}
+                <tr>
+                    <td>{{ c.id }}</td>
+                    <td>{{ c.nom }}</td>
+                    <td><a href="{{ path('DD',{'id':c.id}) }}"  class="btn btn-danger rounded-pill m-2">DELETE</a> </td>
+                    <td><a href="{{ path('U',{'id':c.id}) }}" class="btn btn-primary rounded-pill m-2">UPDATE</a> </td>
+
+
+
+
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+        {{ knp_pagination_render(cc) }}
+
+
+    </div>
+
+{% endblock %}

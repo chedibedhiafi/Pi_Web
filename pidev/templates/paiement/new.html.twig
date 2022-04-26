@@ -1,0 +1,19 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}New Paiement{% endblock %}
+
+{% block body %}
+    <h1>Create new Paiement</h1>
+
+
+
+
+    {{ include('paiement/_form.html.twig') }}
+
+    <a href="{{ path('app_livraison_new') }}">RETOUR</a>
+
+    <form action="/checkout" method="POST">
+        <button type="submit" class="btn btn-primary btn-lg">Passer la commande</button>
+    </form>
+
+{% endblock %}

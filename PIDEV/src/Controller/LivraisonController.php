@@ -45,6 +45,8 @@ class LivraisonController extends AbstractController
         ]);
     }
 
+
+
     /**
      * @Route("/{id}", name="app_livraison_show", methods={"GET"})
      */
@@ -54,6 +56,26 @@ class LivraisonController extends AbstractController
             'livraison' => $livraison,
         ]);
     }
+//    /**
+//     * @Route("/liv/add", name="app_livraison_liv", methods={"GET", "POST"})
+//     */
+//
+//    public function liv (Request $request, LivraisonRepository $livraisonRepository): Response
+//    {
+//        $livraison = new Livraison();
+//        $form = $this->createForm(LivraisonType::class, $livraison);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            $livraisonRepository->add($livraison);
+//            return $this->redirectToRoute('app_livraison_index', [], Response::HTTP_SEE_OTHER);
+//        }
+//
+//        return $this->render('livraison/add.html.twig', [
+//            'livraison' => $livraison,
+//            'form' => $form->createView(),
+//        ]);
+//    }
 
     /**
      * @Route("/{id}/edit", name="app_livraison_edit", methods={"GET", "POST"})
@@ -85,4 +107,6 @@ class LivraisonController extends AbstractController
 
         return $this->redirectToRoute('app_livraison_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
 }

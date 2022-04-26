@@ -12,9 +12,9 @@ class ProduitcommandeType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('id_commande')
-            ->add('id_produit')
             ->add('quantite')
+            ->add('commande')
+            ->add('produit')
         ;
     }
 
