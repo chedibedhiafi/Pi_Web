@@ -1,10 +1,15 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Blog index{% endblock %}
+{% block title %}Liste des blogs{% endblock %}
 
 {% block body %}
-    <h1>Blog index</h1>
+    <h1>Les Blogs:</h1>
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
 
+    {% endfor %}
     <table class="table" border="1">
         <thead>
             <tr>
@@ -23,10 +28,10 @@
                 <td>{{ blog.titre }}</td>
                 <td>{{ blog.sujet }}</td>
                 <td>{{ blog.contenu }}</td>
-                <td>{{ blog.date }}</td>
+                <td>{{ blog.date|date }}</td>
                 <td>
-                    <a href="{{ path('app_blog_show', {'id': blog.id}) }}">show</a>
-                    <a href="{{ path('app_blog_edit', {'id': blog.id}) }}">edit</a>
+                    <a href="{{ path('app_blog_show', {'id': blog.id}) }}"><input type="submit" value="Details" class="btn btn-primary rounded-pill m-2"></a>
+                    <a href="{{ path('app_blog_edit', {'id': blog.id}) }}"><input type="submit" value="Modifier" class="btn btn-primary rounded-pill m-2"></a>
 
                 </td>
             </tr>
@@ -38,7 +43,10 @@
         </tbody>
     </table>
 
-    <a href="{{ path('app_blog_new') }}">Create new</a>
-    <a href="{{ path('AfficheFront') }}">Front</a>
+    <a href="{{ path('app_blog_new') }}"><input type="submit" value="Ajouter un nouveau Blog" class="btn btn-primary rounded-pill m-2"></a>
+    <a href="{{ path('AfficheFront') }}"><input type="submit" value="Go To Front" class="btn btn-primary rounded-pill m-2"></a>
+    <td><a href="{{ path('listp') }}"  class="btn btn-primary w-100 m-2">Imprimer PDF</a> </td>
+    <td><a href="{{ path('excel') }}"  class="btn btn-primary w-100 m-2">Excel</a> </td>
 
+    {{ knp_pagination_render(blogs) }}
 {% endblock %}

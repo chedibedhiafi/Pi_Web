@@ -1,11 +1,11 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}New Blog{% endblock %}
+{% block title %}Nouveau Blog{% endblock %}
 
 {% block body %}
-    <h1>Create new Blog</h1>
+    <h1>Ajouter un Blog</h1>
 
     {{ include('blog/_form.html.twig') }}
 
-    <a href="{{ path('app_blog_index') }}">back to list</a>
+    <a href="{{ path('app_blog_index') }}"><input type="submit" value="Retour" class="btn btn-primary rounded-pill m-2"></a>
 {% endblock %}

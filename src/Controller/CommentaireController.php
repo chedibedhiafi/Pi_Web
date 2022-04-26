@@ -9,6 +9,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use Knp\Component\Pager\PaginatorInterface;
 
 /**
  * @Route("/commentaire")
@@ -28,6 +31,9 @@ class CommentaireController extends AbstractController
             'commentaires' => $commentaires,
         ]);
     }
+
+
+
     /**
      * @Route("/AfficheCmntFront", name="AfficheCmntFront", methods={"GET"})
      */
@@ -53,6 +59,11 @@ class CommentaireController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($commentaire);
             $entityManager->flush();
+            $entityManager->flush();
+            $this->addFlash(
+                'info',
+                'Ajouté avec succès !'
+            );
 
             return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -83,6 +94,11 @@ class CommentaireController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->flush();
+            $entityManager->flush();
+            $this->addFlash(
+                'info',
+                'Modifié avec succès !'
+            );
 
             return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -101,6 +117,11 @@ class CommentaireController extends AbstractController
         if ($this->isCsrfTokenValid('delete'.$commentaire->getId(), $request->request->get('_token'))) {
             $entityManager->remove($commentaire);
             $entityManager->flush();
+            $entityManager->flush();
+            $this->addFlash(
+                'info',
+                'Supprimé avec succès !'
+            );
         }
 
         return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);

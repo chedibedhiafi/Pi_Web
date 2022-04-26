@@ -1,0 +1,28 @@
+{% block body %}
+    <h1>Liste Des Blogs</h1><hr>
+
+    <table class="table" border="1">
+
+        <thead>
+        <tr>
+            <th>Id</th>
+            <th>Titre</th>
+            <th>Sujet</th>
+            <th>Contenu</th>
+            <th>Date</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for blog in b|reverse %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td>{{ blog.titre }}</td>
+                <td>{{ blog.sujet }}</td>
+                <td>{{ blog.contenu }}</td>
+                <td>{{ blog.date }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
