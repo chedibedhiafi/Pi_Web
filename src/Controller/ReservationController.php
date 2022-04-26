@@ -7,6 +7,8 @@ use App\Entity\Reservation;
 use App\Form\Reservation1Type;
 use App\Repository\EventRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,18 +34,72 @@ class ReservationController extends AbstractController
     }
 
     /**
-     * @Route("/new/{prix}", name="app_reservation_new", methods={"GET", "POST"})
+     * @Route("/listp", name="app_reservation_indexp", methods={"GET"})
      */
-    public function new(Request $request, EntityManagerInterface $entityManager,int $prix): Response
+    public function index2(EntityManagerInterface $entityManager): Response
+    {
+        $reservations = $entityManager
+            ->getRepository(Reservation::class)
+            ->findAll();
+
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+
+        // Instantiate Dompdf with our options
+        $dompdf = new Dompdf($pdfOptions);
+
+        // Retrieve the HTML generated in our twig file
+        $html = $this->render('reservation/listp.html.twig', [
+            'reservations' => $reservations,
+        ]);
+
+        // Load HTML to Dompdf
+        $dompdf->loadHtml($html);
+
+        // (Optional) Setup the paper size and orientation 'portrait' or 'portrait'
+        $dompdf->setPaper('A4', 'portrait');
+
+        // Render the HTML as PDF
+        $dompdf->render();
+
+        // Output the generated PDF to Browser (inline view)
+        $dompdf->stream("mypdf.pdf", [
+            "Attachment" => false
+        ]);
+    }
+
+
+    /**
+     * @Route("/new/{prix}/{eventId}", name="app_reservation_new", methods={"GET", "POST"})
+     */
+    public function new(Request $request, EntityManagerInterface $entityManager,int $prix,int $eventId, \Swift_Mailer $mailer): Response
     {
         $reservation = new Reservation();
         $form = $this->createForm(Reservation1Type::class, $reservation);
         $form->handleRequest($request);
-
+        $event= $entityManager
+            ->getRepository(Event::class)
+            ->findOneBy(['eventId' => $eventId]);
+$reservation->setFkEvent($event);
 $reservation->setTotal($reservation->getNbPlaces()*$prix);
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager->persist($reservation);
             $entityManager->flush();
+
+            $message= (new \Swift_Message('QuanTech'))
+                ->setTo('soulayma.jeribi@esprit.tn')
+                ->setFrom('soulayma.jeribi@esprit.tn')
+                ->setBody(
+                    $this->renderView(
+                        'emails/contact.html.twig'
+                    ),
+                    'text/html'
+                )
+            ;
+
+            ;
+            $mailer->send($message);
+
 
             return $this->redirectToRoute('app_reservation_index', [], Response::HTTP_SEE_OTHER);
         }

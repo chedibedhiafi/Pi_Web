@@ -14,8 +14,7 @@ class Reservation1Type extends AbstractType
         $builder
             ->add('nbPlaces')
             ->add('dateAchat')
-            ->add('total')
-            ->add('fkEvent')
+
         ;
     }
 

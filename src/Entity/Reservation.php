@@ -40,7 +40,6 @@ class Reservation
 
     /**
      * @var string
-     * @Assert\NotBlank(message="veuillez entrer votre total")
      * @ORM\Column(name="Total", type="string", length=11, nullable=false)
      */
     private $total;

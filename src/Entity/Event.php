@@ -4,12 +4,15 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * Event
  *
  * @ORM\Table(name="event")
  * @ORM\Entity(repositoryClass="App\Repository\EventRepository")
+ * @Vich\Uploadable
  */
 class Event
 {
@@ -21,6 +24,13 @@ class Event
      * @ORM\GeneratedValue(strategy="IDENTITY")
      */
     private $eventId;
+    /**
+     * @var string
+     *
+     * @Assert\NotBlank(message="veuillez entrer le nombre de places")
+     * @ORM\Column(name="Nb_Places", type="string", length=10, nullable=false)
+     */
+    private $nbPlaces;
 
     /**
      * @var \DateTime
@@ -56,9 +66,14 @@ class Event
     /**
      * @var string|null
      *
-     * @ORM\Column(name="Image", type="string", length=150, nullable=true, options={"default"="NULL"})
+     * @ORM\Column(name="Image", type="string", length=254, nullable=false)
      */
-    private $image = 'NULL';
+    private $image;
+    /**
+     * @Vich\UploadableField(mapping="product_images", fileNameProperty="image")
+     * @var File
+     */
+    private $imageFile;
 
     /**
      * @var string|null
@@ -121,6 +136,33 @@ class Event
     public function setImage(?string $image): self
     {
         $this->image = $image;
+
+        return $this;
+    }
+    public function setImageFile($image = null)
+    {
+        $this->imageFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getImageFile()
+    {
+    }
+        public function getNbPlaces(): ?string
+    {
+        return $this->nbPlaces;
+    }
+
+    public function setNbPlaces(string $nbPlaces): self
+    {
+        $this->nbPlaces = $nbPlaces;
 
         return $this;
     }

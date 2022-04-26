@@ -4,11 +4,13 @@ namespace App\Controller;
 
 use App\Entity\Event;
 use App\Form\Event1Type;
+use Knp\Component\Pager\PaginatorInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 /**
  * @Route("/event")
@@ -31,12 +33,15 @@ class EventController extends AbstractController
     /**
      * @Route("/front", name="app_event_indexf", methods={"GET"})
      */
-    public function indexf(EntityManagerInterface $entityManager): Response
+    public function indexf(PaginatorInterface $paginator,EntityManagerInterface $entityManager , Request $request): Response
     {
         $events = $entityManager
             ->getRepository(Event::class)
             ->findAll();
-
+        $events= $paginator->paginate(
+            $events,
+            $request->query->getInt('page', 1),
+            4);
         return $this->render('event/indexf.html.twig', [
             'events' => $events,
         ]);
