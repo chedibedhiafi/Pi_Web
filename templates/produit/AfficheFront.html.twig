@@ -1,0 +1,89 @@
+{% extends 'front.html.twig' %}
+
+
+
+
+{% block title %}Liste des Produits
+{% endblock %}
+
+{% block home %}
+
+
+    <h1 style = "margin-top : 40px; text-align:center ;font-weight: bold; color:  #00A9CC">Liste des Produits</h1>
+
+
+    <section class="pricing-table section" id="pricing">
+        <div class="container" >
+            <div class="row">
+                <div class="col-md-12" style="border-radius: 20em">
+                    <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
+                            <div class="row">
+
+
+
+                                <form action="{{ path('RechercheFront') }}">
+                                    <input type="text" placeholder="nom" name="nom" class="form-control">
+                                    <input type="submit" value="Recherche" class="btn btn-primary rounded-pill m-2">
+                                </form>
+
+                                {% for produit in p %}
+
+                                    <div class="col-md-4 col-sm-6 col-xs-12"  style="border-radius: 20em">
+                                        <div class="pricing-item" style="height: 600px; border-radius: 10px">
+                                            <h3>{{ produit.nom }}</h3>
+                                            <div class="price" >
+                                                <span>Promotion  : {{ produit.idPromotion.percentage }}% </span>
+                                            </div>
+                                            <div class="pricing-body" >
+                                                <span>Prix:</span>
+                                                <div class="price" >
+
+                                                    <span style="float: left; display: inline-block;margin-right: 1em; text-decoration: line-through">{{ produit.prix }} TND</span>
+
+                                                    <span style="float: right; display: inline-block"> {{ produit.prixfinale }} TND</span>
+                                                    <br>
+                                                </div>
+
+                                                <div class="price" >
+                                                    <span>Categorie  : {{ produit.idCategorie.nom }} </span>
+                                                </div>
+                                                <div class="progress" data-percent="45%">
+                                                    <div class="progress-bar"></div>
+                                                </div>
+
+                                                <td> <img src="{{ asset('uploads/' ~ produit.getImage())  }}" height="200" width="200"></td>                                                <div class="progress" data-percent="45%">
+                                                    <div class="progress-bar"></div>
+                                                </div>
+                                                <p>Description  : {{ produit.description }}</p>
+                                                <div class="progress" data-percent="45%">
+                                                    <div class="progress-bar"></div>
+                                                </div>
+                                               {# <li class="nav-item">
+                                            </div>
+                                            <div class="add-to-cart">
+                                                <button id="btn-add-cart" onclick="location.href='{{ path('add_one_to_cart', { 'id' : produit.id }) }}'" class="add-to-cart-btn"><i class="fa fa-shopping-cart"></i> add to cart</button>
+                                            </div>
+                                                </li>
+#}
+                                            <li class="nav-item">
+                                                <a href="{{path("add_one_to_cart", {id: produit.id})}}" class="btn btn-success">
+                                                    <i class="bi bi-cart-plus"></i> Ajouter au panier
+                                                </a>
+                                            </li>
+                                                <br>
+                                                <div class="progress" data-percent="45%">
+                                                    <div class="progress-bar"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> <!-- End container -->
+    </section>
+{% endblock %}

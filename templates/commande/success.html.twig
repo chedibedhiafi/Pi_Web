@@ -1,0 +1,21 @@
+{% extends 'front.html.twig' %}
+
+
+{% block body %}
+{% block title %}Success {% endblock %}
+
+
+
+    <body>
+    <h1>Thanks for your order!</h1>
+    <p>
+        Votre commande N°{{num_cmd}} a bien été validée. Elle sera traité dès que nous receverons la preuve du paiement.
+    </p>
+    </body>
+
+    <form action="{{ path('ajouterlivraison') }}">
+        <input type="submit" value="Suivant" class="btn btn-primary rounded-pill m-2">
+    </form>
+
+    </body>
+{% endblock %}

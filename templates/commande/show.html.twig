@@ -1,0 +1,84 @@
+{% extends 'front.html.twig' %}
+
+{% block title %}Order Details {% endblock %}
+
+
+
+{% block body %}
+    {% set total  = 0 %}
+    {% set tva       = 0 %}
+    {% set total_ttc = 0 %}
+
+    <table class="table">
+        <tr>
+            <td>
+                <h3>Commande n° {{commande.id}}</h3>
+                <h4>Du {{commande.dateCreation | date('d/m/Y')}}</h4>
+            </td>
+            <td id="details">
+                <h5>{{commande.nom}}</h5>
+                <h5>{{commande.prenom}}</h5>
+                <h5>{{commande.email}}</h5>
+                <h4>{{commande.addresse}}</h4>
+                <h4>Tel : {{commande.telephone}}</h4>
+            </td>
+        </tr>
+    </table>
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Produit</th>
+            <th>Prix</th>
+            <th>Quantite</th>
+            <th>Total</th>
+        </tr>
+        </thead>
+        <tbody>
+
+        {% for ligne in LigneCommande %}
+            <tr>
+                <td>{{ligne.produit.id}}</td>
+                <td>{{ligne.produit.nom}}
+                <td>{{ligne.prixFinale}}</td>
+                <td>{{ligne.quantity}}</td>
+                <td>{{ligne.prixFinale * ligne.quantity}}</td>
+            </tr>
+            {% set total  = total +  ligne.prixFinale * ligne.quantity %}
+        {% endfor %}
+
+        {% set tva       =  total * 10 / 100 %}
+        {% set total_ttc =  tva + total  %}
+
+
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Total</td>
+            <td>{{total}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td>Montant TVA 19%</td>
+            <td>{{tva}}</td>
+        </tr>
+        <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td><strong>Total TTC</strong></td>
+            <td><strong>{{total_ttc}}</strong></td>
+        </tr>
+        </tbody>
+    </table>
+
+
+
+
+
+
+    </script>
+{% endblock %}
