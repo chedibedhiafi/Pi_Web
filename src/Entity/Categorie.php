@@ -4,7 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Serializer\Annotation\Groups;
 /**
  * Categorie
  *
@@ -19,6 +19,7 @@ class Categorie
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups ("post:read")
      */
     private $id;
 
@@ -27,6 +28,7 @@ class Categorie
      *
      * @ORM\Column(name="nom", type="string", length=256, nullable=false)
      * @Assert\NotBlank(message="le nom est obligatoire")
+     * @Groups ("post:read")
      */
     private $nom;
 

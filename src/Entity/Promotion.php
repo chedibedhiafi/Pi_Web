@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Promotion
@@ -25,6 +26,7 @@ class Promotion
      * @var int
      *
      * @ORM\Column(name="percentage", type="integer", nullable=false)
+     * @Groups ("post:read")
      */
     private $percentage;
 

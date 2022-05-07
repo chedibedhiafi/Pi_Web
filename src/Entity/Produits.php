@@ -7,6 +7,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Produits
@@ -23,6 +24,7 @@ class Produits
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups ("post:read")
      */
     private $id;
 
@@ -30,6 +32,7 @@ class Produits
      * @var string
      *@Assert\NotBlank(message="le nom est obligatoire")
      * @ORM\Column(name="nom", type="string", length=256, nullable=false)
+     * @Groups ("post:read")
      */
     private $nom;
 
@@ -37,6 +40,7 @@ class Produits
      * @var int
      *@Assert\NotBlank(message="le prix est obligatoire")
      * @ORM\Column(name="prix", type="integer", nullable=false)
+     * @Groups ("post:read")
      */
     private $prix;
 
@@ -60,8 +64,9 @@ class Produits
      *      min = 7,
      *      max = 100,
      *      minMessage = "doit etre >=5 ",
-     *      maxMessage = "doit etre <=300" )
+     *      maxMessage = "doit etre <=600" )
      * @ORM\Column(name="description", type="string", length=255, nullable=false)
+     * @Groups ("post:read")
      */
     private $description;
 
@@ -69,6 +74,7 @@ class Produits
      * @var int
      *@Assert\NotBlank(message="profit est obligatoire")
      * @ORM\Column(name="profit", type="integer", nullable=false)
+     * @Groups ("post:read")
      */
     private $profit;
 
@@ -76,26 +82,29 @@ class Produits
      * @var int
      *
      * @ORM\Column(name="prixfinale", type="integer", nullable=false)
+     * @Groups ("post:read")
      */
     private $prixfinale;
 
     /**
      * @var \Categorie
      *
-     * @ORM\ManyToOne(targetEntity="Categorie")
+     * @ORM\ManyToOne(targetEntity="Categorie",cascade={"persist", "remove" })
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_categorie", referencedColumnName="id")
      * })
+     * @Groups ("post:read")
      */
     private $idCategorie;
 
     /**
      * @var \Promotion
      *
-     * @ORM\ManyToOne(targetEntity="Promotion")
+     * @ORM\ManyToOne(targetEntity="Promotion",cascade={"persist", "remove" })
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="id_promotion", referencedColumnName="id")
      * })
+     * @Groups ("post:read")
      */
     private $idPromotion;
 

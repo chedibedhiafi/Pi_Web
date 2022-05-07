@@ -5,12 +5,17 @@ namespace App\Controller;
 use App\Data\SearchData;
 use App\Entity\Categorie;
 use App\Entity\Produits;
+use App\Entity\Promotion;
 use App\Form\CategorieForumType;
 use App\Form\ProduitType;
 use App\Form\SearchFormmType;
 use App\Form\SearchFormType;
 use App\Repository\CategorieRepository;
 use App\Repository\ProduitsRepository;
+use App\Repository\PromotionRepository;
+use BaconQrCode\Exception\ExceptionInterface;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityManagerInterface;
 use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -31,9 +36,8 @@ use Endroid\QrCode\Label\Margin\Margin;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
-
-
-
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
+use Symfony\Component\Serializer\SerializerInterface;
 
 
 class ProduitController extends AbstractController
@@ -46,6 +50,159 @@ class ProduitController extends AbstractController
         return $this->render('produit/index.html.twig', [
             'controller_name' => 'ProduitController',
         ]);
+    }
+    /**
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @Route("/AllProduit",name="AllProduit")
+     */
+    public function AllProduit(NormalizerInterface $normalizer){
+        $repo = $this->getDoctrine()->getRepository(Produits::class);
+        $produit = $repo->findAll();
+        $jsonContent = $normalizer->normalize($produit,'json',['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+    /**
+     * @param Request $request
+     * @param $id
+     * @param NormalizerInterface $normalizer
+     * @return Response
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @Route("/produit/{id}",name="ProduitId")
+     */
+    public function ProduitId(Request $request,$id,NormalizerInterface $normalizer)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $produit = $em->getRepository(Produits::class)->find($id);
+        $jsonContent = $normalizer->normalize($produit,'json',['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+
+    }
+
+//    /**
+//     * @param Request $request
+//     * @param NormalizerInterface $normalizer
+//     * @return Response
+//     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+//     * @Route ("/addProduitJSON/new",name="addProduitJSON")
+//     */
+//    public function addproduit(Request $request,NormalizerInterface $normalizer){
+//        $em= $this->getDoctrine()->getManager();
+//        $produit = new Produits();
+//        $categorie = new Categorie();
+//        $promotion = new Promotion();
+//        $produit->setNom($request->get('nom'));
+//        $produit->setPrix($request->get('prix'));
+//        $produit->setDescription($request->get('description'));
+//        $produit->setProfit($request->get('profit'));
+//        $produit->setImage($request->get('image'));
+//        $produit->setIdCategorie($request->get('idcategorie'));
+//        $produit->setIdPromotion($request->get('idpromotion'));
+//        $em->persist($produit);
+//        $em->flush();
+//        $jsonContent = $normalizer->normalize($produit,'json',['groups'=>'post:read']);
+//        return new Response(json_encode($jsonContent));
+//
+//    }
+    /**
+     * @param NormalizerInterface $normalizer
+     * @param Request $request
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/addProduitJson/add/{idPromotion}/{idCategorie}" , name="addProduitjson")
+     */
+    public function addProduitJson(NormalizerInterface $normalizer, Request $request, PromotionRepository $prm, CategorieRepository $cat
+        ,$idCategorie,$idPromotion){
+        $em=$this->getDoctrine()->getManager();
+        $produit = new Produits();
+        $promotion= new Promotion();
+        $categorie = new Categorie();
+        $categorie = $cat->find($idCategorie);
+        $promotion = $prm->find($idPromotion);
+        $produit->setNom($request->get('nom'));
+        $produit->setPrix($request->get('prix'));
+        $produit->setDescription($request->get('description'));
+        $produit->setProfit($request->get('profit'));
+        $produit->setIdPromotion($request->get('percentage'));
+        $produit->setImage($request->get('image'));
+        $produit->setPrixfinale($request->get('prixfinale'));
+        $produit->setIdCategorie($categorie);
+        $produit->setIdPromotion($promotion);
+        $em->persist($produit);
+        $em->flush();
+        $json_content = $normalizer->normalize($produit, 'json',['groups'=>'post:read']);
+        return new Response(json_encode($json_content));
+    }
+
+    /**
+     * @param NormalizerInterface $normalizer
+     * @param Request $request
+     * @param PromotionRepository $prm
+     * @param CategorieRepository $cat
+     * @param $idCategorie
+     * @param $idPromotion
+     * @return Response
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @Route("/editProduitJSON/add/{id}/{idPromotion}/{idCategorie}" , name="editProduitJSON")
+     */
+
+    public function editProduitJSON(NormalizerInterface $normalizer, Request $request, PromotionRepository $prm, CategorieRepository $cat
+        ,$idCategorie,$idPromotion,$id){
+        $em=$this->getDoctrine()->getManager();
+        $produit = new Produits();
+        $promotion= new Promotion();
+        $categorie = new Categorie();
+        $categorie = $cat->find($idCategorie);
+        $promotion = $prm->find($idPromotion);
+        $produit = $em->getRepository(Produits::class)->find($id);
+        $produit->setNom($request->get('nom'));
+        $produit->setPrix($request->get('prix'));
+        $produit->setDescription($request->get('description'));
+        $produit->setProfit($request->get('profit'));
+        $produit->setIdPromotion($request->get('percentage'));
+        $produit->setImage($request->get('image'));
+        $produit->setPrixfinale($request->get('prixfinale'));
+        $produit->setIdCategorie($categorie);
+        $produit->setIdPromotion($promotion);
+        $em->flush();
+        $json_content = $normalizer->normalize($produit, 'json',['groups'=>'post:read']);
+        return new Response(json_encode($json_content));
+    }
+//    /**
+//     * @param Request $request
+//     * @param SerializerInterface $serializerInterface
+//     * @param EntityManager $em
+//     * @return Response
+//     * @throws \Doctrine\ORM\ORMException
+//     * @throws \Doctrine\ORM\OptimisticLockException
+//     * @Route ("/addProductJson", name="addProductJson")
+//     */
+//    public function addProductJson(Request $request, SerializerInterface $serializerInterface, EntityManagerInterface $em){
+//        $content=$request->getContent();
+//        $data=$serializerInterface->deserialize($content,Produits::class,'json');
+//        $em->persist($data);
+//        $em->flush();
+//        return new Response('Produit ajouté avec succés JSON!');
+//    }
+
+    /**
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @param $id
+     * @return Response
+     * @throws \Symfony\Component\Serializer\Exception\ExceptionInterface
+     * @Route("/supprimerproduit/{id}", name="supprimerproduit")
+     */
+    public function deleteproduitjson(Request $request,NormalizerInterface $normalizer,$id){
+        $em = $this->getDoctrine()->getManager();
+        $produit = $em->getRepository(Produits::class)->find($id);
+        $em->remove($produit);
+        $em->flush();
+        $jsonContent =$normalizer->normalize($produit,'json',['groups'=>'post:read']);
+        return new Response("produits supprimé avec succées".json_encode($jsonContent));
+
     }
     /**
      * @param Request $request

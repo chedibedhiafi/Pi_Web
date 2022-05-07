@@ -15,6 +15,7 @@ use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Vich\UploaderBundle\Form\Type\VichImageType;
 
 
+
 class ProduitType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
