@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 /**
  * Commentaire
@@ -19,6 +20,7 @@ class Commentaire
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups ("post:read")
      */
     private $id;
 
@@ -27,6 +29,7 @@ class Commentaire
      *
      * @ORM\Column(name="contenu", type="text", length=65535, nullable=false)
      * @Assert\NotBlank(message="Veuillez écrire le contenu de votre commentaire")
+     * @Groups ("post:read")
      */
     private $contenu;
 
@@ -35,6 +38,7 @@ class Commentaire
      *
      * @ORM\Column(name="date", type="date", nullable=false)
      * @Assert\NotBlank(message="Veuillez saisir la date du commentaire")
+     * @Groups ("post:read")
      */
     private $date;
 
@@ -46,6 +50,7 @@ class Commentaire
      *   @ORM\JoinColumn(name="id_blog", referencedColumnName="id")
      * })
      * @Assert\NotBlank(message="Veuillez selectionner à quel blog vous voulez commentez")
+     * @Groups ("post:read")
      */
     private $idBlog;
 
@@ -57,6 +62,7 @@ class Commentaire
      *   @ORM\JoinColumn(name="id_user", referencedColumnName="id")
      * })
      * @Assert\NotBlank(message="user id est obligatoire")
+     * @Groups ("post:read")
      */
     private $idUser;
 

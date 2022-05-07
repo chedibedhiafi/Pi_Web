@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Commentaire;
 use App\Form\CommentaireType;
+use App\Repository\CommentaireRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,6 +13,8 @@ use Symfony\Component\Routing\Annotation\Route;
 use Dompdf\Dompdf;
 use Dompdf\Options;
 use Knp\Component\Pager\PaginatorInterface;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @Route("/commentaire")
@@ -47,6 +50,21 @@ class CommentaireController extends AbstractController
             'commentaires' => $commentaires,
         ]);
     }
+
+
+    /**
+     * @Route("/CommentairesList",name="CommentairesList")
+     */
+    public function getCommentairesJson(NormalizerInterface $Normalizer, CommentaireRepository $commentaireRepository)
+    {
+        $repository = $this->getDoctrine()->getRepository(Commentaire::class);
+        $commentaires = $commentaireRepository->findAll();
+        $jsonCommentaires = $Normalizer->normalize($commentaires,'json',['groups'=>'post:read']);
+
+        return new Response(json_encode($jsonCommentaires));
+    }
+
+
     /**
      * @Route("/new", name="app_commentaire_new", methods={"GET", "POST"})
      */
@@ -73,6 +91,27 @@ class CommentaireController extends AbstractController
             'form' => $form->createView(),
         ]);
     }
+
+
+    /**
+     * @Route("/AddCommentaireJSON/new", name="AddCommentaireJSON")
+     */
+    public function AddCommentaireJSON(Request $request,NormalizerInterface $Normalizer)
+    {
+        $em= $this->getDoctrine()->getManager();
+        $Commentaire = new Commentaire();
+        $Commentaire->setContenu($request->get('contenu'));
+        $Commentaire->setIdBlog($request->get('idBlog'));
+        $Commentaire->setIdUser($request->get('idUser'));
+//        $Commentaire->setDate(new \DateTime('@'.strtotime('Now')));
+        $Commentaire->setDate($request->get('date'));
+
+        $em->persist($Commentaire);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Commentaire,'json',['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
 
     /**
      * @Route("/{id}", name="app_commentaire_show", methods={"GET"})
@@ -125,5 +164,22 @@ class CommentaireController extends AbstractController
         }
 
         return $this->redirectToRoute('app_commentaire_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @param $id
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteCommentaireJson/{id}", name="deleteCommentaireJson")
+     */
+    public function deleteCommentaireJson(Request $request,NormalizerInterface $normalizer,$id){
+        $em = $this->getDoctrine()->getManager();
+        $commentaire = $em->getRepository(Commentaire::class)->find($id);
+        $em->remove($commentaire);
+        $em->flush();
+        $jsonContent =$normalizer->normalize($commentaire,'json',['groups'=>'commentaires']);
+        return new Response("Le Commentaire a été supprimé avec succées!".json_encode($jsonContent));
     }
 }

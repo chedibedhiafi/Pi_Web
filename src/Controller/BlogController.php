@@ -6,7 +6,9 @@ use App\Entity\Blog;
 use App\Form\BlogType;
 use App\Repository\BlogRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use PhpOffice\PhpSpreadsheet\Writer\Exception;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,6 +18,7 @@ use Knp\Component\Pager\PaginatorInterface;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 /**
  * @Route("/blog")
@@ -39,8 +42,24 @@ class BlogController extends AbstractController
     }
 
     /**
-     * @return \Symfony\Component\HttpFoundation\BinaryFileResponse
-     * @throws \PhpOffice\PhpSpreadsheet\Writer\Exception
+     * @param NormalizerInterface $Normalizer
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/BlogsList",name="BlogsList")
+     */
+    public function getBlogsJson(NormalizerInterface $Normalizer, BlogRepository $blogRepository){
+        $blogRepository = $this->getDoctrine()->getRepository(Blog::class);
+        $blogs = $blogRepository->findAll();
+        $jsonBlogs = $Normalizer->normalize($blogs,'json',['groups'=>'post:read']);
+
+        return new Response(json_encode($jsonBlogs));
+    }
+
+
+    /**
+     * return $this->render(blog/
+     * @return BinaryFileResponse
+     * @throws Exception
      * @Route ("/generateExcel", name="excel")
      */
 
@@ -154,6 +173,24 @@ class BlogController extends AbstractController
     }
 
     /**
+     * @Route("/AddBlogJSON/new", name="AddBlogJSON")
+     */
+    public function AddBlogJSON(Request $request,NormalizerInterface $Normalizer)
+    {
+        $em= $this->getDoctrine()->getManager();
+        $Blog = new Blog();
+        $Blog->setTitre($request->get('titre'));
+        $Blog->setSujet($request->get('sujet'));
+        $Blog->setContenu($request->get('contenu'));
+        $Blog->setDate($request->get('date'));
+//        $Blog->setDate(new \DateTime('@'.strtotime('Now')));
+        $em->persist($Blog);
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Blog,'json',['groups'=>'post:read']);
+        return new Response(json_encode($jsonContent));
+    }
+
+    /**
      * @Route("/{id}", name="app_blog_show", methods={"GET"})
      */
     public function show(Blog $blog): Response
@@ -190,6 +227,25 @@ class BlogController extends AbstractController
     }
 
     /**
+     * @Route("/UpdateBlogJSON/{id}", name="UpdateBlogJSON")
+     */
+    public function UpdateBlogJSON($id,Request $request,NormalizerInterface $Normalizer)
+    {
+        // $id = $request->get("id");
+        $em = $this->getDoctrine()->getManager();
+        $Blog = $this->getDoctrine()->getRepository(Blog::class)->find($id);
+        $Blog->setTitre($request->get('titre'));
+        $Blog->setSujet($request->get('sujet'));
+        $Blog->setContenu($request->get('contenu'));
+        $Blog->setDate($request->get('date'));
+//        $Blog>setDate(new \DateTime('@'.strtotime('Now')));
+
+        $em->flush();
+        $jsonContent = $Normalizer->normalize($Blog,'json',['groups'=>'post:read']);
+        return new Response("Update successfully".json_encode($jsonContent));
+    }
+
+    /**
      * @Route("/{id}", name="app_blog_delete", methods={"POST"})
      */
     public function delete(Request $request, Blog $blog, EntityManagerInterface $entityManager): Response
@@ -206,6 +262,26 @@ class BlogController extends AbstractController
 
         return $this->redirectToRoute('app_blog_index', [], Response::HTTP_SEE_OTHER);
     }
+
+
+    /**
+     * @param Request $request
+     * @param NormalizerInterface $normalizer
+     * @param $id
+     * @return Response
+     * @throws ExceptionInterface
+     * @Route("/deleteBlogJson/{id}", name="deleteBlogJson")
+     */
+    public function deleteBlogJson(Request $request,NormalizerInterface $normalizer,$id){
+        $em = $this->getDoctrine()->getManager();
+        $blog = $em->getRepository(Blog::class)->find($id);
+        $em->remove($blog);
+        $em->flush();
+        $jsonContent =$normalizer->normalize($blog,'json',['groups'=>'blogs']);
+        return new Response("Le blog a été supprimé avec succées!".json_encode($jsonContent));
+    }
+
+
     function sort(BlogRepository $repo){
         $blog=$repo->findBy(array(), array('date' => 'ASC'));
         return $blog;

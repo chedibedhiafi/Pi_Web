@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 
 /**
@@ -20,6 +21,7 @@ class Blog
      * @ORM\Column(name="id", type="integer", nullable=false)
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="IDENTITY")
+     * @Groups ("post:read")
      */
     private $id;
 
@@ -28,6 +30,7 @@ class Blog
      *
      * @ORM\Column(name="titre", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="titre est obligatoire")
+     * @Groups ("post:read")
      */
     private $titre;
 
@@ -36,6 +39,7 @@ class Blog
      *
      * @ORM\Column(name="sujet", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="sujet est obligatoire")
+     * @Groups ("post:read")
      */
     private $sujet;
 
@@ -44,6 +48,7 @@ class Blog
      *
      * @ORM\Column(name="contenu", type="text", length=65535, nullable=false)
      * @Assert\NotBlank(message="contenu est obligatoire")
+     * @Groups ("post:read")
      */
     private $contenu;
 
@@ -52,6 +57,7 @@ class Blog
      *
      * @ORM\Column(name="date", type="string", length=255, nullable=false)
      * @Assert\NotBlank(message="date est obligatoire")
+     * @Groups ("post:read")
      */
     private $date;
 
