@@ -1,0 +1,64 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des blogs{% endblock %}
+
+{% block body %}
+    <h1>Les Blogs:</h1>
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+    <table class="table" border="1">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Titre</th>
+                <th>Sujet</th>
+                <th>Contenu</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for blog in blogs %}
+            <tr>
+                <td>{{ blog.id }}</td>
+                <td>{{ blog.titre }}</td>
+                <td>{{ blog.sujet }}</td>
+                <td>{{ blog.contenu }}</td>
+                <td>{{ blog.date|date }}</td>
+                <td>
+                    <a href="{{ path('app_blog_show', {'id': blog.id}) }}"><input type="submit" value="Details" class="btn btn-primary rounded-pill m-2"></a>
+                    <a href="{{ path('app_blog_edit', {'id': blog.id}) }}"><input type="submit" value="Modifier" class="btn btn-primary rounded-pill m-2"></a>
+
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_blog_new') }}"><input type="submit" value="Ajouter un nouveau Blog" class="btn btn-primary rounded-pill m-2"></a>
+    <a href="{{ path('AfficheFrontBlog') }}"><input type="submit" value="Go To Front" class="btn btn-primary rounded-pill m-2"></a>
+    <td><a href="{{ path('listp') }}"  class="btn btn-primary w-100 m-2">Imprimer PDF</a> </td>
+    <td><a href="{{ path('excel') }}"  class="btn btn-primary w-100 m-2">Excel</a> </td>
+
+    {{ knp_pagination_render(blogs) }}
+
+
+{% endblock %}
+{% block form %}
+{% endblock %}
+{% block salesRevenue %}
+{% endblock %}
+{% block salesChart %}
+{% endblock %}
+{% block messages %}
+{% endblock %}
+{% block table %}
+{% endblock %}

@@ -1,0 +1,85 @@
+{% extends 'front.html.twig' %}
+{#
+{% block home %}
+{% endblock %}
+#}
+{% block aboutUs %}
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+	<section id="about" class="about">
+		<div class="container">
+
+			<div class="section-title aos-init aos-animate" data-aos="fade-up">
+				<h2>Where you can find us</h2>
+			</div>
+		</div>
+	</section>
+	<section id="counts" class="counts">
+		<div class="container">
+
+			<div class="row">
+
+				<div class="row">
+					<div class="scroll">
+						<div class="cards">
+							{% for pointdevente in pointdeventes %}
+
+								<div class="card" onclick="goTo({{pointdevente.longitude}},{{pointdevente.latitude}})">
+
+									<div class="container">
+										<i class="bi bi-shop-window"></i>
+										<h4>
+											<b>{{ pointdevente.name }}</b>
+										</h4>
+										<p>{{ pointdevente.adresse }}</p>
+									</div>
+								</div>
+							{% endfor %}
+
+						</div>
+					</div>
+
+
+					<!-- End .content-->
+				</div>
+			</div>
+
+		</div>
+		<br>
+		<div class="container">
+
+			<div class="row">
+
+				<div id='map'></div>
+
+				<script language="javascript" src="{{asset('front/js/map.js')}}"/>
+				{% for pointdevente in pointdeventes %}
+					<script>
+						addMarker({{ pointdevente.longitude }}, {{ pointdevente.latitude }})
+					</script>
+				{% endfor %}
+
+			</div>
+		</div>
+		{# <script>activateOnClick()</script> #}
+
+	</section>
+
+{% endblock %}
+
+{% block services %}{% endblock %}
+
+{% block portfolio %}
+
+{% endblock %}
+
+{% block team %}{% endblock %}
+
+{% block pricing %}{% endblock %}
+
+{% block faq %}{% endblock %}
+
+{% block contactus %}{% endblock %}
+
+{% block script %}{% endblock %}

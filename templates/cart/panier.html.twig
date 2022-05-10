@@ -1,0 +1,8 @@
+{% if app.user %}
+<a href="{{ path('cart') }}">
+	<i class="bi bi-cart-plus"></i>
+	<span>Panier</span>
+<div class="qty">{{ n }}</div>
+
+</a>
+{% endif %}

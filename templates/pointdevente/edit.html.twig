@@ -1,0 +1,50 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	New Point de vente
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}{% endblock %}
+
+{% block widgets %}{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}
+	<div class="container-fluid pt-4 px-4">
+		<div class="row g-4">
+
+			<div class="col-sm-12 col-xl-6">
+				<div class="bg-light rounded h-100 p-4">
+
+					<a href="{{ path('app_pointdevente_index') }}">
+						<i class="fas fa-arrow-alt-circle-left"></i>
+					</a>
+					<br><br>
+					<h6 class="mb-4">Create new Point de vente</h6>
+
+					{{ include('pointdevente/_form.html.twig', {'button_label': 'Update'}) }}
+
+
+					{{ include('pointdevente/_delete_form.html.twig') }}
+					<a href="{{ path('app_stock_showStock' , {'reference':pointdevente.reference}) }}" >
+						edit in stock
+					</a>
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Nouveau Commentaire{% endblock %}
+
+{% block body %}
+    <h1>Ajouter Un Commentaire</h1>
+
+    {{ include('commentaire/_form.html.twig') }}
+
+    <a href="{{ path('app_blog_index') }}"><input type="submit" value="Retour" class="btn btn-primary rounded-pill m-2"></a>
+{% endblock %}
+{% block form %}
+{% endblock %}
+{% block salesRevenue %}
+{% endblock %}
+{% block salesChart %}
+{% endblock %}
+{% block messages %}
+{% endblock %}
+{% block table %}
+{% endblock %}

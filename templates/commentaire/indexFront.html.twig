@@ -1,0 +1,59 @@
+{% extends 'front(soulayma).html.twig' %}
+
+{% block title %}Commentaire index{% endblock %}
+
+{% block aboutUs %}
+    <h1>Commentaire index</h1>
+
+    <table class="table">
+        <thead>
+        <tr>
+
+            <th>Contenu</th>
+            <th>Date</th>
+            <th>actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for commentaire in commentaires %}
+            <tr>
+                <td>{{ commentaire.contenu }}</td>
+                <td>{{ commentaire.date ? commentaire.date|date('Y-m-d') : '' }}</td>
+                {% if app.user %}
+                <td><a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}"><input type="submit" value="Modifier" class="btn btn-primary rounded-pill m-2"></a></td>
+                {% endif %}
+                
+
+            </tr>
+            
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        
+        </tbody>
+    </table>
+    {% if app.user %}
+            <a href="{{ path('app_commentaire_new', {'blogID': blogID ,'userID': app.user.id} )}}"><input type="submit" value="New" class="btn btn-primary rounded-pill m-2"></a>
+    {% endif %}
+{% endblock %}
+
+
+{% block home %}
+{% endblock %}
+{% block services %}
+{% endblock %}
+{% block features %}
+{% endblock %}
+{% block testimonials %}
+{% endblock %}
+{% block portfolio %}
+{% endblock %}
+{% block team %}
+{% endblock %}
+{% block pricing %}
+{% endblock %}
+{% block faq %}{% endblock %}
+{% block contactus %}
+{% endblock %}

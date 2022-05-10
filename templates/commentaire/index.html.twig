@@ -1,0 +1,57 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des Commentaires{% endblock %}
+
+{% block body %}
+    <h1>Les commentaires:</h1>
+    {% for message in app.flashes('info') %}
+        <div class="alert alert-success">
+            {{ message }}
+        </div>
+
+    {% endfor %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Contenu</th>
+                <th>Date</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commentaire in commentaires %}
+            <tr>
+                <td>{{ commentaire.id }}</td>
+                <td>{{ commentaire.contenu }}</td>
+                <td>{{ commentaire.date|date }}</td>
+                <td>
+                    <a href="{{ path('app_commentaire_show', {'id': commentaire.id}) }}"><input type="submit" value="Details" class="btn btn-primary rounded-pill m-2"></a>
+                    <a href="{{ path('app_commentaire_edit', {'id': commentaire.id}) }}"><input type="submit" value="Modifier" class="btn btn-primary rounded-pill m-2"></a>
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="4">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{{ path('app_commentaire_new') }}"><input type="submit" value="Ajouter un commentaire" class="btn btn-primary rounded-pill m-2"></a>
+    <a href="{{ path('AfficheCmntFront') }}">Front</a>
+
+{% endblock %}
+
+{% block form %}
+{% endblock %}
+{% block salesRevenue %}
+{% endblock %}
+{% block salesChart %}
+{% endblock %}
+{% block messages %}
+{% endblock %}
+{% block table %}
+{% endblock %}
+
+

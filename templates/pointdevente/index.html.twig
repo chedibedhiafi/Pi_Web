@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	Points de ventes
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}
+	<script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+	<script src="https://unpkg.com/leaflet-control-geocoder/dist/Control.Geocoder.js"></script>
+
+	<div class="container-fluid pt-4">
+
+		<div class="bg-light text-center rounded p-4">
+
+			<div class="d-flex align-items-center justify-content-between mb-4">
+				<h6 class="mb-0">Points de ventes</h6>
+				<a href="{{ path('app_pointdevente_new') }}" class="nav-link ">
+					<i class="fa fa-plus"></i>
+				</a>
+			</div>
+			<div class="table-responsive">
+
+
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Reference</th>
+							<th>Name</th>
+							<th>Proprietaire</th>
+							<th>Adresse</th>
+							<th>DateOuverture</th>
+							<th>Longitude</th>
+							<th>Latitude</th>
+							<th>Show</th>
+							<th>Edit</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for pointdevente in pointdeventes %}
+							<tr>
+								<td>{{ pointdevente.reference }}</td>
+								<td>{{ pointdevente.name }}</td>
+								<td>{{ pointdevente.proprietaire }}</td>
+								<td>{{ pointdevente.adresse }}</td>
+								<td>{{ pointdevente.dateOuverture ? pointdevente.dateOuverture|date('Y-m-d') : '' }}</td>
+								<td>{{ pointdevente.longitude }}</td>
+								<td>{{ pointdevente.latitude }}</td>
+								<td>
+
+									<a href="{{ path('app_pointdevente_show', {'reference': pointdevente.reference}) }}">
+										<i class="fa fa-eye"></i>
+									</a>
+								</td>
+								<td>
+									<a href="{{ path('app_pointdevente_edit', {'reference': pointdevente.reference}) }}">
+										<i class="fa fa-book"></i>
+									</a>
+								</td>
+							</tr>
+						{% else %}
+							<tr>
+								<td colspan="8">no records found</td>
+							</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+
+			</div>
+
+
+		</div>
+		
+			{# <div class="bg-light rounded h-100 p-4">
+                            <iframe class="position-relative rounded w-100 h-100" frameborder="0" style="border:0;" allowfullscreen="" aria-hidden="false" tabindex="0">
+										<div id='map'></div>
+										<script language="javascript" src="{{asset('front/js/map.js')}}"/>
+			{% for pointdevente in pointdeventes %}
+				<script>
+					addMarker({{ pointdevente.longitude }}, {{ pointdevente.latitude }})
+				</script>
+			{% endfor %}
+							</iframe>
+                        </div> #}
+
+			
+
+
+	</div>
+
+	
+
+{% endblock %}
+
+{% block widgets %}{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}{% endblock %}

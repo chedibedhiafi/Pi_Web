@@ -1,0 +1,40 @@
+{% extends 'front(soulayma).html.twig' %}
+
+{% block title %}Hello PaiementController!{% endblock %}
+
+
+
+    {% block body %}
+        <h1>Paiement index</h1>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th>IdPayment</th>
+                <th>IdCommmande</th>
+                <th>PrixF</th>
+                <th>ModePayment</th>
+                <th>actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for paiement in paiement %}
+                <tr>
+                    <td>{{ paiement.idPayment }}</td>
+                    <td>{{ paiement.modePayment }}</td>
+                    <td>
+                        <a href="{{ path('app_paiement_show', {'idPayment': paiement.idPayment}) }}">show</a>
+
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="5">no records found</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+    {% endblock %}
+
+

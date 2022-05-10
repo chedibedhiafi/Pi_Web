@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	HistoriqueStock
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}
+	<div class="container-fluid pt-4 px-4">
+
+		<div class="bg-light text-center rounded p-4">
+
+			<div class="d-flex align-items-center justify-content-between mb-4">
+				<h6 class="mb-0">Points de ventes</h6>
+				
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Reference</th>
+                        <th>Point De Vente</th>
+                        <th>Produit</th>
+						<th>Date</th>
+						<th>Quantite</th>
+						<th>Reason</th>
+						<th>actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					{% for historiquestock in historiquestocks %}
+						<tr>
+                            <td>{{ historiquestock.reference }}</td>
+                            <td>{{ historiquestock.idPointdevente }}</td>
+                            <td>{{ historiquestock.idProduit }}</td>
+							
+							<td>{{ historiquestock.date ? historiquestock.date|date('Y-m-d') : '' }}</td>
+							<td>{{ historiquestock.quantite }}</td>
+							<td>{{ historiquestock.reason }}</td>
+							<td>
+								<a href="{{ path('app_historiquestock_show', {'reference': historiquestock.reference}) }}">show</a>
+								<a href="{{ path('app_historiquestock_edit', {'reference': historiquestock.reference}) }}">edit</a>
+							</td>
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="5">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+
+	
+
+</div>{% endblock %}{% block widgets %}{% endblock %}{% block salesChart %}{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}{% block form %}{% endblock %}

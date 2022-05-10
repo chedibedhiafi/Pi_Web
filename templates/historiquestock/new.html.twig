@@ -1,0 +1,181 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}
+	New Historiquestock
+{% endblock %}
+
+
+{% block sale %}{% endblock %}
+
+{% block table %}{% endblock %}
+
+{% block widgets %}{% endblock %}
+
+{% block salesChart %}
+{#
+{% block worldwideSales %}
+{% endblock %}
+
+{% block salesAndRevenue %}
+{% endblock %}
+#}{% endblock %}
+
+{% block form %}
+	<div class="container-fluid pt-4 px-4">
+		<div class="row g-4">
+			<div class="col-sm-12 col-xl-6">
+				<div class="bg-light rounded h-100 p-4">
+					<a href="{{ path('app_stock_showStock' , {'reference':historiquestock.idPointdevente.reference}) }}">
+						<i class="fas fa-arrow-alt-circle-left"></i>
+					</a>
+					<br>
+					<h6 class="mb-4">Edit in Stock :
+						<b>{{ historiquestock.idPointdevente }}</b>
+					</h6>
+					<form method="post">
+
+
+						<div class="mb-3">
+							<label for="exampleInputEmail1" class="form-label">Produit</label>
+
+							<select class="form-select mb-3" aria-label="Default select example" onchange="onSelectProduct()" id="myProductCombo" name="produit">
+							{% set index=0 %}
+								{% for produit in produits %}
+								<option value="{{ index }}">{{ produit }}</option>
+								{% set index=index+1 %}
+								{% endfor %}
+							</select>
+						</div>
+
+						<div class="mb-3">
+							<label for="exampleInputEmail1" class="form-label">Quantite</label>
+							<input type="text" class="form-control" name="quantite">
+
+						</div>
+						
+						<select class="form-select mb-3" aria-label="Default select example" onchange="onComboBoxChanged()" id="comboBox" name="reason">
+							
+								
+								<option value="Restock">Restock</option>
+								<option value="Sale">Sale</option>
+								
+							</select>
+
+						<div class="mb-3">
+							<label for="exampleInputEmail1" class="form-label">Date :
+								<br>
+								<b>{{ historiquestock.date.format('Y-m-d') }}</b> 
+							</label>
+
+						</div>
+
+
+						<button type="submit" class="btn btn-primary">Edit</button>
+					</form>
+
+				</div>
+			</div>
+
+			<div class="col-sm-12 col-xl-6">
+				<div class="bg-light rounded h-100 p-4" id="productPlace">
+					<div class="myProduct">
+					<img id = "myProductImg"  />
+					</div>
+				</div>
+				
+			</div>
+
+			<style>
+			.myProduct
+			{
+			width:100%;
+			}
+			.myProduct img{
+			width: 100%;
+			}
+			</style>
+			<script>
+			let productImagesSrc = [];
+			{% for produit in produits%}
+			productImagesSrc.push(
+				"{{asset('uploads/'~produit.image~'')}}")
+			{% endfor %}
+			function onSelectProduct()
+			{
+			
+			let theProduct = document.getElementById("myProductCombo").value;
+			const mySrc = productImagesSrc[theProduct];
+			document.getElementById("myProductImg").src=mySrc;
+			}
+			</script>
+
+		</div>
+
+
+	</div>
+
+
+	<div class="container-fluid pt-4 px-4">
+
+		<div class="bg-light text-center rounded p-4">
+
+			<div class="d-flex align-items-center justify-content-between mb-4">
+				<h6 class="mb-0">Points de ventes</h6>
+
+			</div>
+			<table class="table">
+				<thead>
+					<tr>
+						<th>Reference</th>
+						<th>Point De Vente</th>
+						<th>Produit</th>
+						<th>Date</th>
+						<th>Quantite</th>
+						<th>Reason</th>
+
+					</tr>
+				</thead>
+				<tbody>
+					{% for historiquestock1 in historiquestocks %}
+						<tr>
+							<td>{{ historiquestock1.reference }}</td>
+							<td>{{ historiquestock1.idPointdevente }}</td>
+							<td>{{ historiquestock1.idProduit }}</td>
+
+							<td>{{ historiquestock1.date ? historiquestock1.date|date('Y-m-d') : '' }}</td>
+							<td>{{ historiquestock1.quantite }}</td>
+							<td>{{ historiquestock1.reason }}</td>
+
+						</tr>
+					{% else %}
+						<tr>
+							<td colspan="5">no records found</td>
+						</tr>
+					{% endfor %}
+				</tbody>
+			</table>
+		</div>
+<script>
+
+function onComboBoxChanged(){
+
+	var e = document.getElementById("#comboBox");
+        var index = e.options[e.selectedIndex].value;
+		var inputVal = "";
+		if (index) {
+			inputVal = index.value;
+			alert(inputVal);
+		}
+
+	/*
+	$('#productPlace').html('<img src="{{asset('front/img/products/'~produits[index-1].image~'')}}" style="width: 120px;height: 120px;">'+
+						'<div class="ms-3">'+
+							'<p class="mb-2">'+
+								'<b>{{ produits[0] }}</b>'+
+							'</p>'+
+							'<p>Quantite <h6 style="color : #4ee44e;"></h6></p>'+
+						'</div>');
+			*/
+}
+</script>
+	{% endblock %}
